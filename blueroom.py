@@ -54,6 +54,10 @@ class BlueroomSpider(scrapy.Spider):
 
         item_hash = dict(parse_qsl(urlparse(src).query))["itemHash"]
 
+        desc = "\n".join(
+            s.strip() for s in response.css(".event-desc *::text").extract()
+        )
+
         yield response.follow(
             "https://tix.blueroom.org.au/api/v1/Items/DatesCached?"
             + urlencode({"itemHash": item_hash, "app": "false"}),
@@ -62,6 +66,7 @@ class BlueroomSpider(scrapy.Spider):
                 "title": title,
                 "item_hash": item_hash,
                 "url": response.url,
+                "desc": desc,
             },
         )
 
@@ -87,5 +92,6 @@ class BlueroomSpider(scrapy.Spider):
             "title": response.meta["title"],
             "item_hash": response.meta["item_hash"],
             "url": response.meta["url"],
+            "desc": response.meta["desc"],
             "dates": [process_date(d) for d in dates],
         }

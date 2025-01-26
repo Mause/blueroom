@@ -29,7 +29,7 @@ for show in shows:
         event.add("dtstart", start)
         event.add("dtend", datetime.fromisoformat(date[1]))
         #        event.add('location', show['url'])
-        event.add("summary", show["url"])  # + '\n\n\n' + show['desc'])
+        event.add("description", show["url"])  # + '\n\n\n' + show['desc'])
         cal.add_component(event)
 
 

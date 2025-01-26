@@ -8,6 +8,9 @@ with open("out.json") as f:
 
 cal = Calendar()
 
+cal.add('prodid', '-//blueroom calendar//mxm.dk//')
+cal.add('version', '2.0')
+
 cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
 cal.add("NAME", "Blueroom Theatre Events")
 

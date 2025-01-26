@@ -1,18 +1,23 @@
+import zoneinfo
 from urllib.parse import parse_qsl, urlencode, urlparse
 
 import scrapy
 from dateutil.parser import parse as dateparse
 from scrapy.http import HtmlResponse
 
+PERTH = zoneinfo.ZoneInfo("Australia/Perth")
+
 
 def process_date(date: str):
     from_, to = date.split(" to ")
 
-    from_ = dateparse(from_)
-
+    from_ = dateparse(from_, tzinfos={None: PERTH})
     to = dateparse(to, default=from_)
 
-    return from_, to
+    return from_.isoformat(), to.isoformat()
+
+
+process_date("2021-07-01 19:00 to 20:00")
 
 
 class BlueroomSpider(scrapy.Spider):

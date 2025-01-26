@@ -53,7 +53,11 @@ class BlueroomSpider(scrapy.Spider):
             "https://tix.blueroom.org.au/api/v1/Items/DatesCached?"
             + urlencode({"itemHash": item_hash, "app": "false"}),
             callback=self.parse_dates,
-            meta={"title": title, "item_hash": item_hash},
+            meta={
+                "title": title,
+                "item_hash": item_hash,
+                "url": response.url,
+            },
         )
 
     def parse_dates(self, response):
@@ -77,5 +81,6 @@ class BlueroomSpider(scrapy.Spider):
         yield {
             "title": response.meta["title"],
             "item_hash": response.meta["item_hash"],
+            "url": response.meta["url"],
             "dates": [process_date(d) for d in dates],
         }

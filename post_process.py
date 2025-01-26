@@ -22,7 +22,9 @@ cal.add("X-PUBLISHED-TTL", refresh_interval)
 for show in shows:
     for date in show["dates"]:
         event = Event()
+        event.add("uid", show["item_hash"])
         event.add("summary", show["title"])
+        event.add("dtstamp", datetime.fromisoformat(date[0]).date())
         event.add("dtstart", datetime.fromisoformat(date[0]))
         event.add("dtend", datetime.fromisoformat(date[1]))
         #        event.add('location', show['url'])

@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 
 from icalendar import Calendar, Event
-from pytz import timezone
 
 with open("out.json") as f:
     shows = json.load(f)
@@ -27,15 +26,10 @@ for show in shows:
         event = Event()
         event.add("uid", show["item_hash"] + ' ' + date[0])
         event.add("summary", show["title"])
-        start = datetime.fromisoformat(date[0]).replace(
-            tzinfo=timezone("Australia/Perth")
-        )
+        start = datetime.fromisoformat(date[0])
         event.add("dtstamp", start)
         event.add("dtstart", start)
-        event.add(
-            "dtend",
-            datetime.fromisoformat(date[1]).replace(tzinfo=timezone("Australia/Perth")),
-        )
+        event.add("dtend", datetime.fromisoformat(date[1]))
         #        event.add('location', show['url'])
         event.add("description", show["url"])  # + '\n\n\n' + show['desc'])
         cal.add_component(event)

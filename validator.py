@@ -12,8 +12,9 @@ r = requests.post(
 r.raise_for_status()
 
 r = r.json()
-print(r.keys())
 
+for warning in r["warnings"]:
+    print(warning)
 
 if r["errors"]:
     print("Errors:")

@@ -27,13 +27,13 @@ cal.add("X-WR-TIMEZONE", "Australia/Perth")
 for show in shows:
     for date in show["dates"]:
         event = Event()
-        event.add("uid", show["item_hash"] + " " + date[0])
+        event.add("uid", show["item_hash"] + " " + date["start"])
         event.add("summary", show["title"])
-        start = datetime.fromisoformat(date[0]).astimezone(tz)
+        start = datetime.fromisoformat(date["start"]).astimezone(tz)
         event.add("dtstamp", start)
         event.add("dtstart", start)
-        event.add("dtend", datetime.fromisoformat(date[1]).astimezone(tz))
-        event.add("location", show["url"])
+        event.add("dtend", datetime.fromisoformat(date["end"]).astimezone(tz))
+        event.add("location", date["venue"])
         event.add("description", (show["url"] + "\n\n\n" + show["desc"]).strip())
         cal.add_component(event)
 

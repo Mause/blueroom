@@ -40,7 +40,9 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Install dependencies
-        run: uv sync
+        run: |
+          pipx install uv
+          uv sync
       - run: uv run just
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

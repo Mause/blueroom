@@ -45,6 +45,7 @@ jobs:
           uv sync
       - uses: extractions/setup-just@v2
       - run: uv run just
+      - run: cat output/dates.ical
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

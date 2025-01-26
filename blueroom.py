@@ -8,16 +8,19 @@ from scrapy.http import HtmlResponse
 PERTH = zoneinfo.ZoneInfo("Australia/Perth")
 
 
-def process_date(date: str):
+def process_date(el):
+    date = "".join(el.css(".ft_ed_dateTime *::text").extract())
+
     from_, to = date.split(" to ")
 
     from_ = dateparse(from_, tzinfos={None: PERTH})
     to = dateparse(to, default=from_)
 
-    return from_.isoformat(), to.isoformat()
-
-
-process_date("2021-07-01 19:00 to 20:00")
+    return {
+        "start": from_.isoformat(),
+        "end": to.isoformat(),
+        "venue": el.css(".ft_ed_venue *::text").extract_first(),
+    }
 
 
 class BlueroomSpider(scrapy.Spider):
@@ -81,17 +84,13 @@ class BlueroomSpider(scrapy.Spider):
             request=response.request,
         )
 
-        dates = {
-            "".join(date.css("::text").extract())
-            for date in response.css(".ft_ed_dateTime")
-        }
-        if "Date" in dates:
-            dates.remove("Date")
+        dates = response.css(".ft_ed_timeRow")
 
+        meta = response.meta
         yield {
-            "title": response.meta["title"],
-            "item_hash": response.meta["item_hash"],
-            "url": response.meta["url"],
-            "desc": response.meta["desc"],
+            "title": meta["title"],
+            "item_hash": meta["item_hash"],
+            "url": meta["url"],
+            "desc": meta["desc"],
             "dates": [process_date(d) for d in dates],
         }

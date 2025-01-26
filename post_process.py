@@ -16,7 +16,6 @@ cal.add("NAME", "Blueroom Theatre Events")
 
 refresh_interval = "PT1H"
 
-breakpoint()
 cal.add("REFRESH-INTERVAL", refresh_interval, parameters={'value': "DURATION"})
 cal.add("X-PUBLISHED-TTL", refresh_interval)
 

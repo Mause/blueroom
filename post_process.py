@@ -7,6 +7,16 @@ with open("out.json") as f:
     shows = json.load(f)
 
 cal = Calendar()
+
+cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
+cal.add("NAME", "Blueroom Theatre Events")
+
+refresh_interval = "PT1H"
+
+breakpoint()
+cal.add("REFRESH-INTERVAL", refresh_interval, parameters={'value': "DURATION"})
+cal.add("X-PUBLISHED-TTL", refresh_interval)
+
 for show in shows:
     for date in show["dates"]:
         event = Event()

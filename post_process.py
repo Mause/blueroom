@@ -33,8 +33,8 @@ for show in shows:
         event.add("dtstamp", start)
         event.add("dtstart", start)
         event.add("dtend", datetime.fromisoformat(date[1]).astimezone(tz))
-        #        event.add('location', show['url'])
-        event.add("description", show["url"])  # + '\n\n\n' + show['desc'])
+        event.add('location', show['url'])
+        event.add("description", (show["url"] + '\n\n\n' + show['desc']).strip())
         cal.add_component(event)
 
 

@@ -83,9 +83,11 @@ class BlueroomSpider(scrapy.Spider):
         if "Date" in dates:
             dates.remove("Date")
 
+        desc = response.css(".ft_ed_description::text").extract_first()
         yield {
             "title": response.meta["title"],
             "item_hash": response.meta["item_hash"],
             "url": response.meta["url"],
             "dates": [process_date(d) for d in dates],
+            "desc": desc,
         }

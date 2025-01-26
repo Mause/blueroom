@@ -8,15 +8,15 @@ with open("out.json") as f:
 
 cal = Calendar()
 
-cal.add('prodid', '-//blueroom calendar//mxm.dk//')
-cal.add('version', '2.0')
+cal.add("prodid", "-//blueroom calendar//mxm.dk//")
+cal.add("version", "2.0")
 
 cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
 cal.add("NAME", "Blueroom Theatre Events")
 
 refresh_interval = "PT1H"
 
-cal.add("REFRESH-INTERVAL", refresh_interval, parameters={'value': "DURATION"})
+cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
 cal.add("X-PUBLISHED-TTL", refresh_interval)
 
 cal.add("X-WR-TIMEZONE", "Australia/Perth")
@@ -24,7 +24,7 @@ cal.add("X-WR-TIMEZONE", "Australia/Perth")
 for show in shows:
     for date in show["dates"]:
         event = Event()
-        event.add("uid", show["item_hash"] + ' ' + date[0])
+        event.add("uid", show["item_hash"] + " " + date[0])
         event.add("summary", show["title"])
         start = datetime.fromisoformat(date[0])
         event.add("dtstamp", start)

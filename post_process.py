@@ -1,7 +1,8 @@
 import json
+import zoneinfo
 from datetime import datetime
 
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event, Timezone
 
 with open("out.json") as f:
     shows = json.load(f)
@@ -19,6 +20,8 @@ refresh_interval = "PT1H"
 cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
 cal.add("X-PUBLISHED-TTL", refresh_interval)
 
+tz = zoneinfo.ZoneInfo("Australia/Perth")
+cal.add_component(Timezone.from_tzinfo(tz))
 cal.add("X-WR-TIMEZONE", "Australia/Perth")
 
 for show in shows:
@@ -26,10 +29,10 @@ for show in shows:
         event = Event()
         event.add("uid", show["item_hash"] + " " + date[0])
         event.add("summary", show["title"])
-        start = datetime.fromisoformat(date[0])
+        start = datetime.fromisoformat(date[0]).astimezone(tz)
         event.add("dtstamp", start)
         event.add("dtstart", start)
-        event.add("dtend", datetime.fromisoformat(date[1]))
+        event.add("dtend", datetime.fromisoformat(date[1]).astimezone(tz))
         #        event.add('location', show['url'])
         event.add("description", show["url"])  # + '\n\n\n' + show['desc'])
         cal.add_component(event)

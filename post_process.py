@@ -1,6 +1,6 @@
 import json
 import zoneinfo
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from ical.calendar import Calendar
 from ical.calendar_stream import IcsCalendarStream
@@ -23,7 +23,6 @@ def main():
 
 def process(shows):
     cal = Calendar()
-    refresh_interval = timedelta(hours=1)
 
     tz = zoneinfo.ZoneInfo("Australia/Perth")
 
@@ -53,7 +52,7 @@ def process(shows):
                 )
             )
 
-    return IcsCalendarStream.calendar_to_ics(cal)
+    return IcsCalendarStream.calendar_to_ics(cal).encode()
 
 
 if __name__ == "__main__":

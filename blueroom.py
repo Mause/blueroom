@@ -1,3 +1,4 @@
+import json
 import zoneinfo
 from urllib.parse import parse_qsl, urlencode, urlparse
 
@@ -48,7 +49,14 @@ class BlueroomSpider(scrapy.Spider):
                 )
 
     def parse_event(self, response):
-        title = response.css("title::text").extract_first()
+        data = json.loads(
+            response.xpath(
+                '//script[@type="application/ld+json"]//text()'
+            ).extract_first()
+        )
+
+        item = data["@graph"][0]["itemListElement"][-1]["item"]
+        title = item["name"]
 
         script_el = response.css("#ft_ftapiJS")
         if not script_el:

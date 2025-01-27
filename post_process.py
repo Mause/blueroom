@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from ical.calendar import Calendar
 from ical.calendar_stream import IcsCalendarStream
 from ical.event import Event
+from ical.parsing.property import ParsedProperty
 from ical.store import EventStore
 
 
@@ -29,9 +30,11 @@ def process(shows):
     cal = Calendar(
         prodid="-//blueroom calendar//mxm.dk//",
         version="2.0",
-        name="Blueroom Theatre Events",
-        refresh_interval=[refresh_interval],
-        source="https://mause.me/blueroom/dates.ical",
+        extras=[
+            ParsedProperty("x-wr-calname", value="Blueroom Theatre Events"),
+            ParsedProperty("refresh_interval", value="PT1H"),
+            ParsedProperty("source", value="https://mause.me/blueroom/dates.ical"),
+        ],
     )
     store = EventStore(cal)
 

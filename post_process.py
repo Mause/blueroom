@@ -1,8 +1,11 @@
 import json
 import zoneinfo
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from icalendar import Calendar, Event, Timezone
+from ical.calendar import Calendar
+from ical.calendar_stream import IcsCalendarStream
+from ical.event import Event
+from ical.store import EventStore
 
 
 def main():
@@ -19,37 +22,35 @@ def main():
 
 def process(shows):
     cal = Calendar()
-
-    cal.add("prodid", "-//blueroom calendar//mxm.dk//")
-    cal.add("version", "2.0")
-
-    cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
-    cal.add("NAME", "Blueroom Theatre Events")
-
-    refresh_interval = "PT1H"
-
-    cal.add("source", "https://mause.me/blueroom/dates.ical")
-    cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
-    cal.add("X-PUBLISHED-TTL", refresh_interval)
+    refresh_interval = timedelta(hours=1)
 
     tz = zoneinfo.ZoneInfo("Australia/Perth")
-    cal.add_component(Timezone.from_tzinfo(tz))
-    cal.add("X-WR-TIMEZONE", "Australia/Perth")
+
+    cal = Calendar(
+        prodid="-//blueroom calendar//mxm.dk//",
+        version="2.0",
+        name="Blueroom Theatre Events",
+        refresh_interval=[refresh_interval],
+        source="https://mause.me/blueroom/dates.ical",
+    )
+    store = EventStore(cal)
 
     for show in shows:
         for date in show["dates"]:
-            event = Event()
-            event.add("uid", show["item_hash"] + " " + date["start"])
-            event.add("summary", show["title"])
             start = datetime.fromisoformat(date["start"]).astimezone(tz)
-            event.add("dtstamp", start)
-            event.add("dtstart", start)
-            event.add("dtend", datetime.fromisoformat(date["end"]).astimezone(tz))
-            event.add("location", date["venue"])
-            event.add("description", (show["url"] + "\n\n\n" + show["desc"]).strip())
-            cal.add_component(event)
+            store.add(
+                Event(
+                    uid=show["item_hash"] + " " + date["start"],
+                    summary=show["title"],
+                    dtstamp=start,
+                    dtstart=start,
+                    dtend=datetime.fromisoformat(date["end"]).astimezone(tz),
+                    location=date["venue"],
+                    description=(show["url"] + "\n\n\n" + show["desc"]).strip(),
+                )
+            )
 
-    return cal.to_ical()
+    return IcsCalendarStream.calendar_to_ics(cal)
 
 
 if __name__ == "__main__":

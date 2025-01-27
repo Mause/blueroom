@@ -33,6 +33,7 @@ class BlueroomSpider(scrapy.Spider):
         "DOWNLOADER_MIDDLEWARES": {
             "scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware": 543,
         },
+        "HTTPCACHE_ENABLED": True,
     }
 
     def parse(self, response):

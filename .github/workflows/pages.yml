@@ -51,10 +51,10 @@ jobs:
           uv sync
       - run: uv run pytest
       - run: uv run make
-      - run: docker run --rm -v $(pwd):/data faph/icalendar-validator /data/output/dates.ical
+      - run: docker run --rm -v $(pwd):/data faph/icalendar-validator /data/output/dates.ics
       - uses: actions/upload-artifact@v4
         with:
-          path: output/dates.ical
+          path: output/dates.ics
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

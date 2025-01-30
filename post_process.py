@@ -40,6 +40,7 @@ def process(shows, timestamp):
 
     cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
     cal.add("NAME", "Blueroom Theatre Events")
+    cal.add("color", "yellow")
 
     refresh_interval = "PT1H"
 

@@ -4,6 +4,7 @@
   BEGIN:VCALENDAR
   VERSION:2.0
   PRODID:-//blueroom calendar//mxm.dk//
+  COLOR:yellow
   NAME:Blueroom Theatre Events
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
   SOURCE:https://mause.me/blueroom/dates.ics
@@ -45,6 +46,7 @@
   BEGIN:VCALENDAR
   VERSION:2.0
   PRODID:-//blueroom calendar//mxm.dk//
+  COLOR:yellow
   NAME:Blueroom Theatre Events
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
   SOURCE:https://mause.me/blueroom/dates.ics

@@ -64,6 +64,9 @@ def process(shows, timestamp):
                 "description",
                 "\n\n".join([show["url"], show["desc"], f"Updated: {timestamp}"]),
             )
+            event.add(
+                "x-alt-desc", show["html_desc"], parameters={"fmttype": "text/html"}
+            )
             cal.add_component(event)
 
     return cal.to_ical()

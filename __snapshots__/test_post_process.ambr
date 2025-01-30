@@ -6,7 +6,7 @@
   PRODID:-//blueroom calendar//mxm.dk//
   NAME:Blueroom Theatre Events
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
-  SOURCE:https://mause.me/blueroom/dates.ical
+  SOURCE:https://mause.me/blueroom/dates.ics
   X-PUBLISHED-TTL:PT1H
   X-WR-CALNAME:Blueroom Theatre Events
   X-WR-TIMEZONE:Australia/Perth
@@ -47,7 +47,7 @@
   PRODID:-//blueroom calendar//mxm.dk//
   NAME:Blueroom Theatre Events
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
-  SOURCE:https://mause.me/blueroom/dates.ical
+  SOURCE:https://mause.me/blueroom/dates.ics
   X-PUBLISHED-TTL:PT1H
   X-WR-CALNAME:Blueroom Theatre Events
   X-WR-TIMEZONE:Australia/Perth

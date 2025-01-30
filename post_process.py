@@ -8,7 +8,7 @@ from jinja2 import Template
 template = Template(
     """\
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<a href="dates.ical?timestamp={{timestamp | urlencode}}">Download iCal</a>
+<a href="dates.ics?timestamp={{timestamp | urlencode}}">Download iCal</a>
 """
 )
 
@@ -25,7 +25,7 @@ def main():
 
     output = process(shows, timestamp=timestamp)
 
-    with open("output/dates.ical", "wb") as fh:
+    with open("output/dates.ics", "wb") as fh:
         fh.write(output)
 
     with open("output/index.html", "w") as fh:
@@ -43,7 +43,7 @@ def process(shows, timestamp):
 
     refresh_interval = "PT1H"
 
-    cal.add("source", "https://mause.me/blueroom/dates.ical")
+    cal.add("source", "https://mause.me/blueroom/dates.ics")
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 

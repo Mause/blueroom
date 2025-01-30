@@ -63,10 +63,7 @@ def process(shows, timestamp):
             event.add("location", date["venue"])
             event.add(
                 "description",
-                "\n\n".join([show["url"], show["desc"], f"Updated: {timestamp}"]),
-            )
-            event.add(
-                "x-alt-desc", show["html_desc"], parameters={"fmttype": "text/html"}
+                "\n\n".join([show["url"], show["html_desc"], f"Updated: {timestamp}"]),
             )
             cal.add_component(event)
 

@@ -1,8 +1,12 @@
-from post_process import process
+from datetime import datetime
+
+from post_process import process, tz
+
+dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=tz)
 
 
 def test_post_process(snapshot):
-    output = process([]).decode()
+    output = process([], dt).decode()
 
     assert output == snapshot
 
@@ -23,7 +27,8 @@ def test_post_process_event(snapshot):
                     }
                 ],
             }
-        ]
+        ],
+        dt,
     ).decode()
 
     assert output == snapshot

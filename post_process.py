@@ -12,6 +12,8 @@ template = Template(
 """
 )
 
+tz = zoneinfo.ZoneInfo("Australia/Perth")
+
 
 def main():
     input_filename = "out.json"
@@ -19,16 +21,18 @@ def main():
     with open(input_filename) as f:
         shows = json.load(f)
 
-    output = process(shows)
+    timestamp = datetime.now(tz).isoformat()
+
+    output = process(shows, timestamp=timestamp)
 
     with open("output/dates.ical", "wb") as fh:
         fh.write(output)
 
     with open("output/index.html", "w") as fh:
-        fh.write(template.render(timestamp=datetime.now().isoformat()))
+        fh.write(template.render(timestamp=timestamp))
 
 
-def process(shows):
+def process(shows, timestamp):
     cal = Calendar()
 
     cal.add("prodid", "-//blueroom calendar//mxm.dk//")
@@ -43,7 +47,6 @@ def process(shows):
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 
-    tz = zoneinfo.ZoneInfo("Australia/Perth")
     cal.add_component(Timezone.from_tzinfo(tz))
     cal.add("X-WR-TIMEZONE", "Australia/Perth")
 
@@ -57,7 +60,10 @@ def process(shows):
             event.add("dtstart", start)
             event.add("dtend", datetime.fromisoformat(date["end"]).astimezone(tz))
             event.add("location", date["venue"])
-            event.add("description", (show["url"] + "\n\n\n" + show["desc"]).strip())
+            event.add(
+                "description",
+                "\n\n".join([show["url"], show["desc"], f"Updated: {timestamp}"]),
+            )
             cal.add_component(event)
 
     return cal.to_ical()

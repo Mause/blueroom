@@ -52,7 +52,7 @@ jobs:
       - run: uv run pytest
       - run: uv run make
       - run: docker run --rm -v $(pwd):/data faph/icalendar-validator /data/output/dates.ical
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: output/dates.ical
       - name: Upload artifact

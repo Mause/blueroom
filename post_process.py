@@ -3,6 +3,14 @@ import zoneinfo
 from datetime import datetime
 
 from icalendar import Calendar, Event, Timezone
+from jinja2 import Template
+
+template = Template(
+    """\
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<a href="dates.ical?timestamp={{timestamp | urlencode}}">Download iCal</a>
+"""
+)
 
 
 def main():
@@ -15,6 +23,9 @@ def main():
 
     with open("output/dates.ical", "wb") as fh:
         fh.write(output)
+
+    with open("output/index.html", "w") as fh:
+        fh.write(template.render(timestamp=datetime.now().isoformat()))
 
 
 def process(shows):

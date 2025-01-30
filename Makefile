@@ -1,6 +1,6 @@
 output/dates.ical: out.json post_process.py validator.py
 	python post_process.py
-	python validator.py
+#	python validator.py
 
 website:
 

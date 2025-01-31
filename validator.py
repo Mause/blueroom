@@ -5,7 +5,7 @@ import requests
 r = requests.post(
     "https://icalendar.org/validator.html?json=1",
     files={
-        "jform[ical_file]": "\r\n".join(open("output/dates.ical").read().splitlines())
+        "jform[ical_file]": "\r\n".join(open("output/dates.ics").read().splitlines())
     },
 )
 

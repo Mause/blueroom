@@ -4,9 +4,10 @@
   BEGIN:VCALENDAR
   VERSION:2.0
   PRODID:-//blueroom calendar//mxm.dk//
+  COLOR:yellow
   NAME:Blueroom Theatre Events
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
-  SOURCE:https://mause.me/blueroom/dates.ical
+  SOURCE:https://mause.me/blueroom/dates.ics
   X-PUBLISHED-TTL:PT1H
   X-WR-CALNAME:Blueroom Theatre Events
   X-WR-TIMEZONE:Australia/Perth
@@ -45,9 +46,10 @@
   BEGIN:VCALENDAR
   VERSION:2.0
   PRODID:-//blueroom calendar//mxm.dk//
+  COLOR:yellow
   NAME:Blueroom Theatre Events
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
-  SOURCE:https://mause.me/blueroom/dates.ical
+  SOURCE:https://mause.me/blueroom/dates.ics
   X-PUBLISHED-TTL:PT1H
   X-WR-CALNAME:Blueroom Theatre Events
   X-WR-TIMEZONE:Australia/Perth
@@ -83,8 +85,8 @@
   DTEND;TZID=Australia/Perth:20200101T160000
   DTSTAMP:20200101T060000Z
   UID:123 2020-01-01T14:00:00+08:00
-  DESCRIPTION:https://example.com\n\nThis is a test event\n\nUpdated: 2020-0
-   1-01 12:00:00+08:00
+  DESCRIPTION:https://example.com\n\n<p>This is a test event</p>\n\nUpdated:
+    2020-01-01 12:00:00+08:00
   LOCATION:Backrooms
   END:VEVENT
   END:VCALENDAR

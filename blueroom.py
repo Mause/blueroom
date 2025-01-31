@@ -70,6 +70,7 @@ class BlueroomSpider(scrapy.Spider):
                 "item_hash": item_hash,
                 "url": response.url,
                 "desc": desc,
+                "html_desc": str(response.css(".event-desc").get()),
             },
         )
 
@@ -92,5 +93,6 @@ class BlueroomSpider(scrapy.Spider):
             "item_hash": meta["item_hash"],
             "url": meta["url"],
             "desc": meta["desc"],
+            "html_desc": meta["html_desc"],
             "dates": [process_date(d) for d in dates],
         }

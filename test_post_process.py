@@ -19,6 +19,7 @@ def test_post_process_event(snapshot):
                 "title": "Test Event",
                 "url": "https://example.com",
                 "desc": "This is a test event",
+                "html_desc": "<p>This is a test event</p>",
                 "dates": [
                     {
                         "start": "2020-01-01T14:00:00+08:00",

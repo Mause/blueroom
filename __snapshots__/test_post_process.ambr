@@ -86,7 +86,8 @@
   DTSTAMP:20200101T060000Z
   UID:123 2020-01-01T14:00:00+08:00
   DESCRIPTION:https://example.com\n\n<p>This is a test event</p>\n\nUpdated:
-    2020-01-01 12:00:00+08:00
+    12:00PM\, January  1\, 2020
+  LAST-MODIFIED:20200101T040000Z
   LOCATION:Backrooms
   END:VEVENT
   END:VCALENDAR

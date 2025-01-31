@@ -17,6 +17,8 @@ Updated: {{timestamp}}
 
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
+fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
+
 
 def main():
     input_filename = "out.json"
@@ -24,7 +26,7 @@ def main():
     with open(input_filename) as f:
         shows = json.load(f)
 
-    timestamp = datetime.now(tz).strftime("%l:%M%p, %B %e, %Y")
+    timestamp = datetime.now(tz)
 
     output = process(shows, timestamp=timestamp)
 
@@ -32,7 +34,7 @@ def main():
         fh.write(output)
 
     with open("output/index.html", "w") as fh:
-        fh.write(template.render(timestamp=timestamp))
+        fh.write(template.render(timestamp=fmt(timestamp)))
 
 
 def process(shows, timestamp):
@@ -60,13 +62,16 @@ def process(shows, timestamp):
             event.add("uid", show["item_hash"] + " " + date["start"])
             event.add("summary", show["title"])
             start = datetime.fromisoformat(date["start"]).astimezone(tz)
+            event.add("last-modified", timestamp)
             event.add("dtstamp", start)
             event.add("dtstart", start)
             event.add("dtend", datetime.fromisoformat(date["end"]).astimezone(tz))
             event.add("location", date["venue"])
             event.add(
                 "description",
-                "\n\n".join([show["url"], show["html_desc"], f"Updated: {timestamp}"]),
+                "\n\n".join(
+                    [show["url"], show["html_desc"], f"Updated: {fmt(timestamp)}"]
+                ),
             )
             cal.add_component(event)
 

@@ -8,7 +8,10 @@ from jinja2 import Template
 template = Template(
     """\
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<h1>Blueroom Theatre Events</h1>
 <a href="dates.ics?timestamp={{timestamp | urlencode}}">Download iCal</a>
+<br/>
+Updated: {{timestamp}}
 """
 )
 
@@ -21,7 +24,7 @@ def main():
     with open(input_filename) as f:
         shows = json.load(f)
 
-    timestamp = datetime.now(tz).isoformat()
+    timestamp = datetime.now(tz).strftime("%l:%M%p, %B %e, %Y")
 
     output = process(shows, timestamp=timestamp)
 

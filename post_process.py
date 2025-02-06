@@ -61,10 +61,9 @@ def process(shows, timestamp):
             event = Event()
             event.add("uid", show["item_hash"] + " " + date["start"])
             event.add("summary", show["title"])
-            start = datetime.fromisoformat(date["start"]).astimezone(tz)
             event.add("last-modified", timestamp)
-            event.add("dtstamp", start)
-            event.add("dtstart", start)
+            event.add("dtstamp", timestamp)
+            event.add("dtstart", datetime.fromisoformat(date["start"]).astimezone(tz))
             event.add("dtend", datetime.fromisoformat(date["end"]).astimezone(tz))
             event.add("location", date["venue"])
             event.add(

@@ -2,9 +2,9 @@ import json
 from asyncio import gather
 from datetime import datetime, timedelta
 
+import bs4
 import httpx
 import uvloop
-from rich import print
 
 url = "https://tix.blueroom.org.au/api/v1/Items/Browse"
 
@@ -41,27 +41,27 @@ def boop(shows, descriptions):
 
 
 async def get_show(client, key, item_hash):
-    res = await client.get(
-        "https://tix.blueroom.org.au/api/v1/Events",
-        params=({"itemHash": item_hash, "hash": "new"}),
-    )
-    # .json()
-    print(res.text)
-    res = json.loads(res["SuccessMessages"][0])
-    print(res)
-    return (key, res)
+    res = (
+        await client.get(
+            "https://blueroom.org.au" + item_hash["URL"].rsplit("/", 1)[0].lower(),
+            headers={"User-Agent": "Mozilla/5.0"},
+            follow_redirects=True,
+        )
+    ).text
+    soup = bs4.BeautifulSoup(res, "html.parser")
+    html_desc = soup.css.select_one(".event-desc")
+    return (key, html_desc)
 
 
 async def main():
     client = httpx.AsyncClient()
     data = (await client.get(url)).json()
     shows = groupby(data["Items"], lambda x: x["Name"].replace(" - Opening Night", ""))
-    descriptions = await gather(
-        *[get_show(client, key, values[0]["Hash"]) for key, values in shows.items()]
+    descriptions = dict(
+        await gather(
+            *[get_show(client, key, values[0]) for key, values in shows.items()]
+        )
     )
-    print({name: len(instances) for name, instances in shows.items()})
-    print(data["Items"][0])
-
     with open("out.json", "w") as f:
         json.dump(list(boop(shows, descriptions)), f, indent=2)
 

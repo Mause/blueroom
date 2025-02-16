@@ -1,3 +1,4 @@
+import sys
 import json
 from asyncio import gather
 from datetime import datetime, timedelta
@@ -58,7 +59,8 @@ async def get_show(domain, client, key, event):
     return (key, str(html_desc) if html_desc else None)
 
 
-async def main(domain="blueroom.org.au"):
+async def main(argv):
+    domain = argv[0] if argv else "blueroom.org.au"
     url = f"https://tix.{domain}/api/v1/Items/Browse"
     client = httpx.AsyncClient()
     data = (await client.get(url)).json()
@@ -73,4 +75,4 @@ async def main(domain="blueroom.org.au"):
 
 
 if __name__ == "__main__":
-    uvloop.run(main())
+    uvloop.run(main(sys.argv[1:]))

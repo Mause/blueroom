@@ -45,10 +45,10 @@ def boop(domain, shows, descriptions):
         }
 
 
-async def get_show(domain, client, key, item_hash):
+async def get_show(domain, client, key, event):
     res = (
         await client.get(
-            get_event_url(domain, item_hash),
+            get_event_url(domain, event),
             headers={"User-Agent": "Mozilla/5.0"},
             follow_redirects=True,
         )

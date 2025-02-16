@@ -6,8 +6,6 @@ import bs4
 import httpx
 import uvloop
 
-url = "https://tix.blueroom.org.au/api/v1/Items/Browse"
-
 
 def groupby(iterable, key):
     groups = {}
@@ -16,54 +14,62 @@ def groupby(iterable, key):
     return groups
 
 
-def make_date(date):
+def make_date(domain, date):
     start = datetime.fromisoformat(date["DateTime"])
     duration = timedelta(minutes=date["Runtime"])
     return {
         "start": start.isoformat(),
         "end": (start + duration).isoformat(),
         "venue": date["VenueName"],
-        "url": "https://tix.blueroom.org.au" + date["URL"],
+        "url": f"https://tix.{domain}" + date["URL"],
     }
 
 
-def boop(shows, descriptions):
+def get_event_url(domain, event):
+    path = event["URL"]
+    if path.count("/") == 3:
+        path = path.rsplit("/", 1)[0]
+    return f"https://{domain}" + path.lower() + "/"
+
+
+def boop(domain, shows, descriptions):
     for show, instances in shows.items():
         i = instances[0]
         meta = descriptions[show]
         yield {
             "item_hash": i["Hash"],
             "title": i["Name"],
-            "url": "https://blueroom.org.au/" + i["URL"].rsplit("/", 1)[0],
+            "url": get_event_url(domain, i),
             "html_desc": meta,
-            "dates": [make_date(instance) for instance in instances],
+            "dates": [make_date(domain, instance) for instance in instances],
         }
 
 
-async def get_show(client, key, item_hash):
+async def get_show(domain, client, key, item_hash):
     res = (
         await client.get(
-            "https://blueroom.org.au" + item_hash["URL"].rsplit("/", 1)[0].lower(),
+            get_event_url(domain, item_hash),
             headers={"User-Agent": "Mozilla/5.0"},
             follow_redirects=True,
         )
     ).text
     soup = bs4.BeautifulSoup(res, "html.parser")
     html_desc = soup.css.select_one(".event-desc")
-    return (key, html_desc)
+    return (key, str(html_desc) if html_desc else None)
 
 
-async def main():
+async def main(domain="blueroom.org.au"):
+    url = f"https://tix.{domain}/api/v1/Items/Browse"
     client = httpx.AsyncClient()
     data = (await client.get(url)).json()
     shows = groupby(data["Items"], lambda x: x["Name"].replace(" - Opening Night", ""))
     descriptions = dict(
         await gather(
-            *[get_show(client, key, values[0]) for key, values in shows.items()]
+            *[get_show(domain, client, key, values[0]) for key, values in shows.items()]
         )
     )
-    with open("out.json", "w") as f:
-        json.dump(list(boop(shows, descriptions)), f, indent=2)
+    with open(f"{domain}.json", "w") as f:
+        json.dump(list(boop(domain, shows, descriptions)), f, indent=2)
 
 
 if __name__ == "__main__":

@@ -42,6 +42,7 @@ def boop(domain, shows, descriptions):
             "title": i["Name"],
             "url": get_event_url(domain, i),
             "html_desc": meta,
+            "desc": i["DescriptionBrief"],
             "dates": [make_date(domain, instance) for instance in instances],
         }
 

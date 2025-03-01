@@ -17,7 +17,7 @@ out.json: website blueroom.py
 
 
 output/%.ics: output/%.json
-	python postprocess.py $<
+	python post_process.py $<
 	python validator.py $@
 
 output/%.json:

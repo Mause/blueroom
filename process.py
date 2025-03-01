@@ -1,6 +1,7 @@
 import sys
 import json
 from asyncio import gather
+from tqdm import tqdm
 from datetime import datetime, timedelta
 
 import bs4
@@ -67,8 +68,13 @@ async def main(argv):
     data = (await client.get(url)).json()
     shows = groupby(data["Items"], lambda x: x["Name"].replace(" - Opening Night", ""))
     descriptions = dict(
-        await gather(
-            *[get_show(domain, client, key, values[0]) for key, values in shows.items()]
+        tqdm(
+            await gather(
+                *[
+                    get_show(domain, client, key, values[0])
+                    for key, values in shows.items()
+                ]
+            )
         )
     )
     with open(f"output/{domain}.json", "w") as f:

@@ -71,7 +71,7 @@ async def main(argv):
             *[get_show(domain, client, key, values[0]) for key, values in shows.items()]
         )
     )
-    with open(f"{domain}.json", "w") as f:
+    with open(f"output/{domain}.json", "w") as f:
         json.dump(list(boop(domain, shows, descriptions)), f, indent=2)
 
 

@@ -1,6 +1,8 @@
 import json
+import sys
 import zoneinfo
 from datetime import datetime
+from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
 from jinja2 import Template
@@ -21,7 +23,8 @@ fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
 
 
 def main():
-    input_filename = "out.json"
+    input_filename = Path(sys.argv[1])
+    output_filename = input_filename.with_suffix(".ics")
 
     with open(input_filename) as f:
         shows = json.load(f)
@@ -30,7 +33,7 @@ def main():
 
     output = process(shows, timestamp=timestamp)
 
-    with open("output/dates.ics", "wb") as fh:
+    with open(output_filename, "wb") as fh:
         fh.write(output)
 
     with open("output/index.html", "w") as fh:

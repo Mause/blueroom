@@ -1,4 +1,4 @@
-all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/dates.ics
+all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/dates.ics output/index.html
 
 
 output/dates.ics: out.json post_process.py validator.py
@@ -23,3 +23,5 @@ output/%.ics: output/%.json
 output/%.json:
 	python process.py $(*F)
 
+output/index.html:
+	python index.py

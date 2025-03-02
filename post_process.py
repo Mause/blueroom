@@ -5,17 +5,6 @@ from datetime import datetime
 from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
-from jinja2 import Template
-
-template = Template(
-    """\
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<h1>Blueroom Theatre Events</h1>
-<a href="dates.ics?timestamp={{timestamp | urlencode}}">Download iCal</a>
-<br/>
-Updated: {{timestamp}}
-"""
-)
 
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
@@ -35,9 +24,6 @@ def main():
 
     with open(output_filename, "wb") as fh:
         fh.write(output)
-
-    with open("output/index.html", "w") as fh:
-        fh.write(template.render(timestamp=fmt(timestamp)))
 
 
 def process(shows, timestamp):

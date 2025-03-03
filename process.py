@@ -1,12 +1,12 @@
-import sys
 import json
+import sys
 from asyncio import gather
-from tqdm import tqdm
 from datetime import datetime, timedelta
 
 import bs4
 import httpx
 import uvloop
+from tqdm import tqdm
 
 
 def groupby(iterable, key):

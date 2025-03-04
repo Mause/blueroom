@@ -3,7 +3,7 @@ all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/dates.ics 
 
 output/dates.ics: out.json post_process.py validator.py
 	python post_process.py $< $@
-#	python validator.py
+	docker run --rm -v $(pwd):/data faph/icalendar-validator /data/output/dates.ics
 
 website:
 
@@ -18,7 +18,7 @@ out.json: website blueroom.py
 
 output/%.ics: output/%.json
 	python post_process.py $< $@
-	python validator.py $@
+	docker run --rm -v $(pwd):/data faph/icalendar-validator /data/output/$@
 
 output/%.json:
 	python process.py $(*F)

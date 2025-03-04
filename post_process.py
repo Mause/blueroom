@@ -58,7 +58,13 @@ def process(shows, timestamp):
             event.add(
                 "description",
                 "\n\n".join(
-                    [show["url"], show["html_desc"], f"Updated: {fmt(timestamp)}"]
+                    fragment
+                    for fragment in [
+                        show["url"],
+                        show["html_desc"],
+                        f"Updated: {fmt(timestamp)}",
+                    ]
+                    if fragment
                 ),
             )
             cal.add_component(event)

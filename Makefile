@@ -2,7 +2,7 @@ all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/dates.ics 
 
 
 output/dates.ics: out.json post_process.py validator.py
-	python post_process.py
+	python post_process.py $< $@
 #	python validator.py
 
 website:
@@ -17,7 +17,7 @@ out.json: website blueroom.py
 
 
 output/%.ics: output/%.json
-	python post_process.py $<
+	python post_process.py $< $@
 	python validator.py $@
 
 output/%.json:

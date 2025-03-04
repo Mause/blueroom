@@ -25,7 +25,6 @@ def main():
     timestamp = datetime.now(tz)
 
     with open("output/index.html", "w") as fh:
-        breakpoint()
         fh.write(template.render(timestamp=fmt(timestamp), files=list(files)))
 
 

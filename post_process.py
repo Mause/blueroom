@@ -20,25 +20,27 @@ def main():
 
     timestamp = datetime.now(tz)
 
-    output = process(shows, timestamp=timestamp)
+    output = process(shows, timestamp=timestamp, output_filename=output_filename)
 
     with open(output_filename, "wb") as fh:
         fh.write(output)
 
 
-def process(shows, timestamp):
+def process(shows, timestamp: datetime, output_filename: Path):
     cal = Calendar()
 
-    cal.add("prodid", "-//blueroom calendar//mxm.dk//")
+    name = f"{output_filename.stem} calendar".title()
+
+    cal.add("prodid", f"-//{name}//mxm.dk//")
     cal.add("version", "2.0")
 
-    cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
-    cal.add("NAME", "Blueroom Theatre Events")
+    cal.add("X-WR-CALNAME", name)
+    cal.add("NAME", name)
     cal.add("color", "yellow")
 
     refresh_interval = "PT1H"
 
-    cal.add("source", "https://mause.me/blueroom/dates.ics")
+    cal.add("source", "https://mause.me/blueroom/" + output_filename.name)
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 

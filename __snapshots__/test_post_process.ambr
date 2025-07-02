@@ -3,13 +3,13 @@
   '''
   BEGIN:VCALENDAR
   VERSION:2.0
-  PRODID:-//blueroom calendar//mxm.dk//
+  PRODID:-//Dates Calendar//mxm.dk//
   COLOR:yellow
-  NAME:Blueroom Theatre Events
+  NAME:Dates Calendar
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
   SOURCE:https://mause.me/blueroom/dates.ics
   X-PUBLISHED-TTL:PT1H
-  X-WR-CALNAME:Blueroom Theatre Events
+  X-WR-CALNAME:Dates Calendar
   X-WR-TIMEZONE:Australia/Perth
   BEGIN:VTIMEZONE
   TZID:Australia/Perth
@@ -45,13 +45,13 @@
   '''
   BEGIN:VCALENDAR
   VERSION:2.0
-  PRODID:-//blueroom calendar//mxm.dk//
+  PRODID:-//Dates Calendar//mxm.dk//
   COLOR:yellow
-  NAME:Blueroom Theatre Events
+  NAME:Dates Calendar
   REFRESH-INTERVAL;VALUE=DURATION:PT1H
   SOURCE:https://mause.me/blueroom/dates.ics
   X-PUBLISHED-TTL:PT1H
-  X-WR-CALNAME:Blueroom Theatre Events
+  X-WR-CALNAME:Dates Calendar
   X-WR-TIMEZONE:Australia/Perth
   BEGIN:VTIMEZONE
   TZID:Australia/Perth

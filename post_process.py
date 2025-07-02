@@ -1,19 +1,10 @@
 import json
+import sys
 import zoneinfo
 from datetime import datetime
+from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
-from jinja2 import Template
-
-template = Template(
-    """\
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<h1>Blueroom Theatre Events</h1>
-<a href="dates.ics?timestamp={{timestamp | urlencode}}">Download iCal</a>
-<br/>
-Updated: {{timestamp}}
-"""
-)
 
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
@@ -21,35 +12,35 @@ fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
 
 
 def main():
-    input_filename = "out.json"
+    input_filename = Path(sys.argv[1])
+    output_filename = input_filename.with_suffix(".ics")
 
     with open(input_filename) as f:
         shows = json.load(f)
 
     timestamp = datetime.now(tz)
 
-    output = process(shows, timestamp=timestamp)
+    output = process(shows, timestamp=timestamp, output_filename=output_filename)
 
-    with open("output/dates.ics", "wb") as fh:
+    with open(output_filename, "wb") as fh:
         fh.write(output)
 
-    with open("output/index.html", "w") as fh:
-        fh.write(template.render(timestamp=fmt(timestamp)))
 
-
-def process(shows, timestamp):
+def process(shows, timestamp: datetime, output_filename: Path):
     cal = Calendar()
 
-    cal.add("prodid", "-//blueroom calendar//mxm.dk//")
+    name = f"{output_filename.stem} calendar".title()
+
+    cal.add("prodid", f"-//{name}//mxm.dk//")
     cal.add("version", "2.0")
 
-    cal.add("X-WR-CALNAME", "Blueroom Theatre Events")
-    cal.add("NAME", "Blueroom Theatre Events")
+    cal.add("X-WR-CALNAME", name)
+    cal.add("NAME", name)
     cal.add("color", "yellow")
 
     refresh_interval = "PT1H"
 
-    cal.add("source", "https://mause.me/blueroom/dates.ics")
+    cal.add("source", "https://mause.me/blueroom/" + output_filename.name)
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 
@@ -69,7 +60,13 @@ def process(shows, timestamp):
             event.add(
                 "description",
                 "\n\n".join(
-                    [show["url"], show["html_desc"], f"Updated: {fmt(timestamp)}"]
+                    fragment
+                    for fragment in [
+                        show["url"],
+                        show["html_desc"],
+                        f"Updated: {fmt(timestamp)}",
+                    ]
+                    if fragment
                 ),
             )
             cal.add_component(event)

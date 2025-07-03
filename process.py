@@ -31,7 +31,7 @@ def get_event_url(domain, event):
     path = event["URL"]
     if path.count("/") == 3:
         path = path.rsplit("/", 1)[0]
-    return f"https://{domain}" + path.lower() + "/"
+    return f"https://{domain}{path.lower()}/"
 
 
 def boop(domain, shows, descriptions):

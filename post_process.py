@@ -40,7 +40,7 @@ def process(shows, timestamp: datetime, output_filename: Path):
 
     refresh_interval = "PT1H"
 
-    cal.add("source", "https://mause.me/blueroom/" + output_filename.name)
+    cal.add("source", f"https://mause.me/blueroom/{output_filename.name}")
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 

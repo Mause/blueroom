@@ -6,13 +6,13 @@ from post_process import process, tz
 dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=tz)
 
 
-def test_post_process(snapshot):
+def test_post_process(snapshot) -> None:
     output = process([], dt, output_filename=Path("output/dates.ics")).decode()
 
     assert output == snapshot
 
 
-def test_post_process_event(snapshot):
+def test_post_process_event(snapshot) -> None:
     output = process(
         [
             {

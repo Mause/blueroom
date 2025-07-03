@@ -2,6 +2,7 @@ import json
 import sys
 from asyncio import gather
 from datetime import datetime, timedelta
+from typing import Callable, Iterable
 
 import bs4
 import httpx
@@ -9,7 +10,7 @@ import uvloop
 from tqdm import tqdm
 
 
-def groupby(iterable, key):
+def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[V]]:
     groups = {}
     for item in iterable:
         groups.setdefault(key(item), []).append(item)

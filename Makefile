@@ -1,4 +1,4 @@
-all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/dates.ics output/index.html
+all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/index.html
 
 
 website:

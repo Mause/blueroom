@@ -13,7 +13,7 @@ out.json: website blueroom.py
 
 output/%.ics: output/%.json post_process.py
 	python post_process.py $< $@
-	docker run --rm -v $(pwd):/data faph/icalendar-validator /data/output/$@
+	docker run --rm -v $(shell pwd):/data faph/icalendar-validator /data/$@
 
 output/%.json:
 	python process.py $(*F)

@@ -11,7 +11,9 @@ template = Template(
 <h1>Events</h1>
 <ul>
 {% for file in files %}
+<li>
 <a href="{{file.name}}?timestamp={{timestamp | urlencode}}">Download {{file.stem}} iCal</a>
+</li>
 {% endfor %}
 </ul>
 <br/>

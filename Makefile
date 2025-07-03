@@ -18,5 +18,5 @@ output/%.ics: output/%.json post_process.py
 output/%.json:
 	python process.py $(*F)
 
-output/index.html:
+output/index.html: website index.py
 	python index.py

@@ -22,7 +22,7 @@ Updated: {{timestamp}}
 )
 
 
-def main():
+def main() -> None:
     files = Path("output").glob("*.ics")
     timestamp = datetime.now(tz)
 

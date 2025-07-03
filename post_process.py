@@ -11,7 +11,7 @@ tz = zoneinfo.ZoneInfo("Australia/Perth")
 fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
 
 
-def main():
+def main() -> None:
     input_filename = Path(sys.argv[1])
     output_filename = input_filename.with_suffix(".ics")
 
@@ -26,7 +26,7 @@ def main():
         fh.write(output)
 
 
-def process(shows, timestamp: datetime, output_filename: Path):
+def process(shows: list[dict], timestamp: datetime, output_filename: Path) -> str:
     cal = Calendar()
 
     name = f"{output_filename.stem} calendar".title()

@@ -27,7 +27,7 @@ def make_date(domain, date):
     }
 
 
-def get_event_url(domain, event):
+def get_event_url(domain: str, event: dict) -> str:
     path = event["URL"]
     if path.count("/") == 3:
         path = path.rsplit("/", 1)[0]
@@ -48,7 +48,9 @@ def boop(domain, shows, descriptions):
         }
 
 
-async def get_show(domain, client, key, event):
+async def get_show(
+    domain: str, client: httpx.AsyncClient, key: str, event: dict
+) -> tuple[str, str | None]:
     res = (
         await client.get(
             get_event_url(domain, event),
@@ -61,7 +63,7 @@ async def get_show(domain, client, key, event):
     return (key, str(html_desc) if html_desc else None)
 
 
-async def main(argv):
+async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
     url = f"https://tix.{domain}/api/v1/Items/Browse"
     client = httpx.AsyncClient()

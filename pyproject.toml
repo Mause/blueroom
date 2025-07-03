@@ -28,4 +28,4 @@ dev = [
 ]
 
 [tool.ruff.lint]
-select = ['F', 'I']
+select = ['F', 'I', 'ANN']

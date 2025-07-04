@@ -1,7 +1,6 @@
-from datetime import datetime
 from enum import Enum
 
-from pydantic import AnyUrl, BaseModel, RootModel
+from pydantic import AnyUrl, AwareDatetime, BaseModel, RootModel
 
 
 class Status(Enum):
@@ -12,8 +11,8 @@ class Status(Enum):
 
 class Event(BaseModel):
     class EventDate(BaseModel):
-        start: datetime
-        end: datetime
+        start: AwareDatetime
+        end: AwareDatetime
         venue: str
         status: Status
         url: AnyUrl

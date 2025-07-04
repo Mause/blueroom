@@ -10,7 +10,7 @@ import uvloop
 from rich.logging import RichHandler
 from tqdm import tqdm
 
-from models import Event
+from models import Event, Status
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
@@ -47,6 +47,7 @@ def make_date(domain: str, date: FerveItem) -> Event.EventDate:
             "start": start,
             "end": (start + duration),
             "venue": date["VenueName"],
+            "status": Status(date["Status"]),
             "url": f"https://tix.{domain}" + date["URL"]
         }
     )

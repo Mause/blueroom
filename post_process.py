@@ -6,6 +6,8 @@ from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
 
+from process import Status
+
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
 fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
@@ -51,7 +53,7 @@ def process(shows: list[dict], timestamp: datetime, output_filename: Path) -> by
         for date in show["dates"]:
             event = Event()
             event.add("uid", show["item_hash"] + " " + date["start"])
-            event.add("summary", show["title"])
+            event.add("summary", show["title"] + " (Tickets " + Status(date['status']).name + ")")
             event.add("last-modified", timestamp)
             event.add("dtstamp", timestamp)
             event.add("dtstart", datetime.fromisoformat(date["start"]).astimezone(tz))

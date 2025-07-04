@@ -2,7 +2,7 @@ import json
 import sys
 from asyncio import gather
 from datetime import datetime, timedelta
-from typing import Callable, Iterable
+from typing import Callable, Generator, Iterable, TypedDict, cast
 
 import bs4
 import httpx
@@ -10,14 +10,29 @@ import uvloop
 from tqdm import tqdm
 
 
+class FerveItem(TypedDict):
+    Name: str
+    URL: str
+    Hash: str
+    DescriptionBrief: str
+    Runtime: int
+    DateTime: str
+    VenueName: str
+    Status: int
+
+
+class FerveBrowse(TypedDict):
+    Items: list[FerveItem]
+
+
 def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[V]]:
-    groups = {}
+    groups: dict[K, list[V]] = {}
     for item in iterable:
         groups.setdefault(key(item), []).append(item)
     return groups
 
 
-def make_date(domain: str, date: dict) -> dict[str, str]:
+def make_date(domain: str, date: FerveItem) -> dict[str, str]:
     start = datetime.fromisoformat(date["DateTime"])
     duration = timedelta(minutes=date["Runtime"])
     return {
@@ -28,7 +43,7 @@ def make_date(domain: str, date: dict) -> dict[str, str]:
     }
 
 
-def get_event_url(domain: str, event: dict) -> str:
+def get_event_url(domain: str, event: FerveItem) -> str:
     path = event["URL"]
     if path.count("/") == 3:
         path = path.rsplit("/", 1)[0]
@@ -36,7 +51,7 @@ def get_event_url(domain: str, event: dict) -> str:
 
 
 def boop(
-    domain: str, shows: dict[str, list[dict]], descriptions: dict[str, str]
+    domain: str, shows: dict[str, list[FerveItem]], descriptions: dict[str, str | None]
 ) -> Iterable[dict]:
     for show, instances in shows.items():
         i = instances[0]
@@ -52,7 +67,7 @@ def boop(
 
 
 async def get_show(
-    domain: str, client: httpx.AsyncClient, key: str, event: dict
+    domain: str, client: httpx.AsyncClient, key: str, event: FerveItem
 ) -> tuple[str, str | None]:
     res = (
         await client.get(
@@ -70,8 +85,10 @@ async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
     url = f"https://tix.{domain}/api/v1/Items/Browse"
     client = httpx.AsyncClient()
-    data = (await client.get(url)).json()
-    shows = groupby(data["Items"], lambda x: x["Name"].replace(" - Opening Night", ""))
+    data = cast(FerveBrowse, (await client.get(url)).json())
+    shows: dict[str, list[FerveItem]] = groupby(
+        data["Items"], lambda x: x["Name"].replace(" - Opening Night", "")
+    )
     descriptions = dict(
         tqdm(
             await gather(

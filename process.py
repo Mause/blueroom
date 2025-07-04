@@ -11,6 +11,7 @@ from rich.logging import RichHandler
 from tqdm import tqdm
 
 from models import Event, Events, Status
+from post_process import tz
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
@@ -38,7 +39,7 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
 
 
 def make_date(domain: str, date: FerveItem) -> Event.EventDate:
-    start = datetime.fromisoformat(date["DateTime"])
+    start = datetime.fromisoformat(date["DateTime"]).replace(tzinfo=tz)
     duration = timedelta(minutes=date["Runtime"])
 
     return Event.EventDate.model_validate(

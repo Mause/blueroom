@@ -1,5 +1,6 @@
 import json
 import zoneinfo
+from typing import Iterator
 from urllib.parse import parse_qsl, urlencode, urlparse
 
 import scrapy
@@ -9,7 +10,7 @@ from scrapy.http import HtmlResponse
 PERTH = zoneinfo.ZoneInfo("Australia/Perth")
 
 
-def process_date(el):
+def process_date(el: scrapy.Selector) -> dict:
     date = "".join(el.css(".ft_ed_dateTime *::text").extract())
 
     from_, to = date.split(" to ")
@@ -36,7 +37,7 @@ class BlueroomSpider(scrapy.Spider):
         "HTTPCACHE_ENABLED": True,
     }
 
-    def parse(self, response):
+    def parse(self, response: HtmlResponse) -> Iterator[dict]:
         """
         <a href="https://blueroom.org.au/events/amplified-souls/" title="More Info" aria-label="More Info" class="btn">
                 Info
@@ -49,7 +50,7 @@ class BlueroomSpider(scrapy.Spider):
                     event.xpath("@href").extract_first(), callback=self.parse_event
                 )
 
-    def parse_event(self, response):
+    def parse_event(self, response: HtmlResponse) -> Iterator[dict]:
         data = json.loads(
             response.xpath(
                 '//script[@type="application/ld+json"]//text()'
@@ -83,7 +84,7 @@ class BlueroomSpider(scrapy.Spider):
             },
         )
 
-    def parse_dates(self, response):
+    def parse_dates(self, response: HtmlResponse) -> Iterator[dict]:
         messages = response.json().get("SuccessMessages", [])
         if not messages:
             return

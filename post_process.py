@@ -26,7 +26,7 @@ def main() -> None:
         fh.write(output)
 
 
-def process(shows: list[dict], timestamp: datetime, output_filename: Path) -> str:
+def process(shows: list[dict], timestamp: datetime, output_filename: Path) -> bytes:
     cal = Calendar()
 
     name = f"{output_filename.stem} calendar".title()

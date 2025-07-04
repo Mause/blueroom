@@ -17,7 +17,7 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
     return groups
 
 
-def make_date(domain, date):
+def make_date(domain: str, date: dict) -> dict[str, str]:
     start = datetime.fromisoformat(date["DateTime"])
     duration = timedelta(minutes=date["Runtime"])
     return {
@@ -35,7 +35,9 @@ def get_event_url(domain: str, event: dict) -> str:
     return f"https://{domain}{path.lower()}/"
 
 
-def boop(domain, shows, descriptions):
+def boop(
+    domain: str, shows: dict[str, list[dict]], descriptions: dict[str, str]
+) -> Iterable[dict]:
     for show, instances in shows.items():
         i = instances[0]
         meta = descriptions[show]

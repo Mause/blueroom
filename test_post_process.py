@@ -42,3 +42,46 @@ def test_post_process_event(snapshot: SnapshotAssertion) -> None:
     ).decode()
 
     assert output == snapshot
+
+
+def test_unusual_dates(snapshot: SnapshotAssertion) -> None:
+    output = process(
+        Events.model_validate(
+            [
+                {
+                    "item_hash": "ab14eaecc5144650a99de68d3f64bbca",
+                    "title": "Love Stories",
+                    "url": "https://blueroom.org.au/events/love-stories/",
+                    "html_desc": '',
+                    "desc": "Thousands",
+                    "dates": [
+                        {
+                            "start": "2025-07-04T18:30:00",
+                            "end": "2025-07-04T19:20:00",
+                            "venue": "Kaos Room",
+                            "status": 6,
+                            "url": "https://tix.blueroom.org.au/Events/Love-Stories/Fri-Jul-4-2025-18-30",
+                        },
+                        {
+                            "start": "2025-07-05T14:00:00",
+                            "end": "2025-07-05T14:50:00",
+                            "venue": "Kaos Room",
+                            "status": 4,
+                            "url": "https://tix.blueroom.org.au/Events/Love-Stories/Sat-Jul-5-2025-14-00",
+                        },
+                        {
+                            "start": "2025-07-05T18:30:00",
+                            "end": "2025-07-05T19:20:00",
+                            "venue": "Kaos Room",
+                            "status": 6,
+                            "url": "https://tix.blueroom.org.au/Events/Love-Stories/Sat-Jul-5-2025-18-30",
+                        },
+                    ],
+                },
+            ]
+        ).root,
+        dt,
+        output_filename=Path("output/unusual_dates.ics"),
+    ).decode()
+
+    assert output == snapshot

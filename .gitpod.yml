@@ -1,0 +1,9 @@
+
+tasks:
+  - init: make
+
+vscode:
+  extensions:
+    - charliermarsh.ruff
+    - astral-sh.ty
+

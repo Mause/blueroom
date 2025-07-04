@@ -58,8 +58,9 @@ def process(
             event.add("summary", f"{show.title} (Tickets {date.status.name})")
             event.add("last-modified", timestamp)
             event.add("dtstamp", timestamp)
-            event.add("dtstart", (date.start).astimezone(tz))
-            event.add("dtend", (date.end).astimezone(tz))
+            # TODO: can we remove this timezone conversion?
+            event.add("dtstart", date.start.astimezone(tz))
+            event.add("dtend", date.end.astimezone(tz))
             event.add("location", date.venue)
             event.add(
                 "description",

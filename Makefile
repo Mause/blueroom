@@ -1,5 +1,7 @@
 all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/index.html
 
+clean:
+	rm -rf output/*
 
 website:
 

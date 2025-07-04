@@ -1,4 +1,3 @@
-import json
 import sys
 import zoneinfo
 from datetime import datetime
@@ -6,7 +5,8 @@ from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
 
-from process import Status
+from models import Event as ShowEvent
+from models import Events
 
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
@@ -18,7 +18,7 @@ def main() -> None:
     output_filename = input_filename.with_suffix(".ics")
 
     with open(input_filename) as f:
-        shows = json.load(f)
+        shows = Events.model_validate_json(f.read()).root
 
     timestamp = datetime.now(tz)
 
@@ -28,7 +28,9 @@ def main() -> None:
         fh.write(output)
 
 
-def process(shows: list[dict], timestamp: datetime, output_filename: Path) -> bytes:
+def process(
+    shows: list[ShowEvent], timestamp: datetime, output_filename: Path
+) -> bytes:
     cal = Calendar()
 
     name = f"{output_filename.stem} calendar".title()
@@ -50,22 +52,22 @@ def process(shows: list[dict], timestamp: datetime, output_filename: Path) -> by
     cal.add("X-WR-TIMEZONE", "Australia/Perth")
 
     for show in shows:
-        for date in show["dates"]:
+        for date in show.dates:
             event = Event()
-            event.add("uid", show["item_hash"] + " " + date["start"])
-            event.add("summary", show["title"] + " (Tickets " + Status(date['status']).name + ")")
+            event.add("uid", f"{show.item_hash} {date.start.isoformat()}")
+            event.add("summary", f"{show.title} (Tickets {date.status.name})")
             event.add("last-modified", timestamp)
             event.add("dtstamp", timestamp)
-            event.add("dtstart", datetime.fromisoformat(date["start"]).astimezone(tz))
-            event.add("dtend", datetime.fromisoformat(date["end"]).astimezone(tz))
-            event.add("location", date["venue"])
+            event.add("dtstart", (date.start).astimezone(tz))
+            event.add("dtend", (date.end).astimezone(tz))
+            event.add("location", date.venue)
             event.add(
                 "description",
                 "\n\n".join(
                     fragment
                     for fragment in [
-                        show["url"],
-                        show["html_desc"],
+                        str(show.url),
+                        show.html_desc,
                         f"Updated: {fmt(timestamp)}",
                     ]
                     if fragment

@@ -80,13 +80,13 @@
   END:STANDARD
   END:VTIMEZONE
   BEGIN:VEVENT
-  SUMMARY:Test Event
+  SUMMARY:Test Event (Tickets AVAILABLE)
   DTSTART;TZID=Australia/Perth:20200101T140000
   DTEND;TZID=Australia/Perth:20200101T160000
   DTSTAMP:20200101T040000Z
   UID:123 2020-01-01T14:00:00+08:00
-  DESCRIPTION:https://example.com\n\n<p>This is a test event</p>\n\nUpdated:
-    12:00PM\, January  1\, 2020
+  DESCRIPTION:https://example.com/\n\n<p>This is a test event</p>\n\nUpdated
+   : 12:00PM\, January  1\, 2020
   LAST-MODIFIED:20200101T040000Z
   LOCATION:Backrooms
   END:VEVENT

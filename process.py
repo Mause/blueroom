@@ -41,14 +41,13 @@ def make_date(domain: str, date: FerveItem) -> Event.EventDate:
     start = datetime.fromisoformat(date["DateTime"])
     duration = timedelta(minutes=date["Runtime"])
 
-
     return Event.EventDate.model_validate(
         {
             "start": start,
             "end": (start + duration),
             "venue": date["VenueName"],
             "status": Status(date["Status"]),
-            "url": f"https://tix.{domain}" + date["URL"]
+            "url": f"https://tix.{domain}" + date["URL"],
         }
     )
 

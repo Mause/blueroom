@@ -1,18 +1,20 @@
 from datetime import datetime
 from pathlib import Path
 
+from syrupy.assertion import SnapshotAssertion
+
 from post_process import process, tz
 
 dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=tz)
 
 
-def test_post_process(snapshot) -> None:
+def test_post_process(snapshot: SnapshotAssertion) -> None:
     output = process([], dt, output_filename=Path("output/dates.ics")).decode()
 
     assert output == snapshot
 
 
-def test_post_process_event(snapshot) -> None:
+def test_post_process_event(snapshot: SnapshotAssertion) -> None:
     output = process(
         [
             {

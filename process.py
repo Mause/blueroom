@@ -1,4 +1,3 @@
-import json
 import logging
 import sys
 from asyncio import gather
@@ -10,6 +9,8 @@ import httpx
 import uvloop
 from rich.logging import RichHandler
 from tqdm import tqdm
+
+from models import Event
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
@@ -36,15 +37,19 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
     return groups
 
 
-def make_date(domain: str, date: FerveItem) -> dict[str, str]:
+def make_date(domain: str, date: FerveItem) -> Event.EventDate:
     start = datetime.fromisoformat(date["DateTime"])
     duration = timedelta(minutes=date["Runtime"])
-    return {
-        "start": start.isoformat(),
-        "end": (start + duration).isoformat(),
-        "venue": date["VenueName"],
-        "url": f"https://tix.{domain}" + date["URL"],
-    }
+
+
+    return Event.EventDate.model_validate(
+        {
+            "start": start,
+            "end": (start + duration),
+            "venue": date["VenueName"],
+            "url": f"https://tix.{domain}" + date["URL"]
+        }
+    )
 
 
 def get_event_url(domain: str, event: FerveItem) -> str:
@@ -56,18 +61,20 @@ def get_event_url(domain: str, event: FerveItem) -> str:
 
 def boop(
     domain: str, shows: dict[str, list[FerveItem]], descriptions: dict[str, str | None]
-) -> Iterable[dict]:
+) -> Generator[Event, None, None]:
     for show, instances in shows.items():
         i = instances[0]
         meta = descriptions[show]
-        yield {
-            "item_hash": i["Hash"],
-            "title": i["Name"],
-            "url": get_event_url(domain, i),
-            "html_desc": meta,
-            "desc": i["DescriptionBrief"],
-            "dates": [make_date(domain, instance) for instance in instances],
-        }
+        yield Event.model_validate(
+            {
+                "item_hash": i["Hash"],
+                "title": i["Name"],
+                "url": get_event_url(domain, i),
+                "html_desc": meta,
+                "desc": i["DescriptionBrief"],
+                "dates": [make_date(domain, instance) for instance in instances],
+            }
+        )
 
 
 async def get_show(
@@ -104,7 +111,11 @@ async def main(argv: list[str]) -> None:
         )
     )
     with open(f"output/{domain}.json", "w") as f:
-        json.dump(list(boop(domain, shows, descriptions)), f, indent=2)
+        f.write(
+            Events(root=list(boop(domain, shows, descriptions))).model_dump_json(
+                indent=2
+            )
+        )
 
 
 if __name__ == "__main__":

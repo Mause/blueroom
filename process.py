@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from asyncio import gather
 from datetime import datetime, timedelta
@@ -7,7 +8,10 @@ from typing import Callable, Generator, Iterable, TypedDict, cast
 import bs4
 import httpx
 import uvloop
+from rich.logging import RichHandler
 from tqdm import tqdm
+
+logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
 
 class FerveItem(TypedDict):

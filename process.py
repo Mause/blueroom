@@ -10,7 +10,7 @@ import uvloop
 from rich.logging import RichHandler
 from tqdm import tqdm
 
-from models import Event, Status
+from models import Event, Events, Status
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 

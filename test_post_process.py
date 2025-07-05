@@ -39,7 +39,7 @@ def test_post_process_event(snapshot: SnapshotAssertion) -> None:
                 ],
                 "updated_at": dt,
             }
-        ).root,
+        ).events,
         dt,
         output_filename=Path("output/dates.ics"),
     ).decode()
@@ -78,7 +78,7 @@ def test_unusual_dates(snapshot: SnapshotAssertion) -> None:
                 ],
                 "updated_at": dt,
             }
-        ).root,
+        ).events,
         dt,
         output_filename=Path("output/unusual_dates.ics"),
     ).decode()

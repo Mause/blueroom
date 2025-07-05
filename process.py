@@ -111,12 +111,11 @@ async def main(argv: list[str]) -> None:
             )
         )
     )
+    data = Events(
+        events=list(boop(domain, shows, descriptions)), updated_at=datetime.now(tz)
+    )
     with open(f"output/{domain}.json", "w") as f:
-        f.write(
-            Events(root=list(boop(domain, shows, descriptions))).model_dump_json(
-                indent=2
-            )
-        )
+        f.write(data.model_dump_json(indent=2))
 
 
 if __name__ == "__main__":

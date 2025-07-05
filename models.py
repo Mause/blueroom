@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import AnyUrl, AwareDatetime, BaseModel, RootModel
+from pydantic import AnyUrl, AwareDatetime, BaseModel
 
 
 class Status(Enum):
@@ -25,5 +25,6 @@ class Event(BaseModel):
     dates: list[EventDate]
 
 
-class Events(RootModel[list[Event]]):
-    pass
+class Events(BaseModel):
+    updated_at: AwareDatetime
+    events: list[Event]

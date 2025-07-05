@@ -18,11 +18,11 @@ def main() -> None:
     output_filename = input_filename.with_suffix(".ics")
 
     with open(input_filename) as f:
-        shows = Events.model_validate_json(f.read()).root
+        data = Events.model_validate_json(f.read())
 
-    timestamp = datetime.now(tz)
+    timestamp = data.updated_at
 
-    output = process(shows, timestamp=timestamp, output_filename=output_filename)
+    output = process(data.events, timestamp=timestamp, output_filename=output_filename)
 
     with open(output_filename, "wb") as fh:
         fh.write(output)

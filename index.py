@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from jinja2 import Template
@@ -23,8 +23,10 @@ Updated: {{timestamp}}
 
 
 def main() -> None:
-    files = Path("output").glob("*.ics")
-    timestamp = datetime.now(tz)
+    files = list(Path("output").glob("*.ics"))
+    timestamp = datetime.fromtimestamp(
+        files[0].stat().st_mtime, tz=timezone.utc
+    ).astimezone(tz)
 
     with open("output/index.html", "w") as fh:
         fh.write(template.render(timestamp=fmt(timestamp), files=list(files)))

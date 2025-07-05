@@ -17,7 +17,8 @@ template = Template(
 {% endfor %}
 </ul>
 <br/>
-Updated: {{timestamp}}
+Updated: {{timestamp}}<br/>
+View the code on <a href="https://github.com/Mause/blueroom">GitHub</a>.
 """
 )
 

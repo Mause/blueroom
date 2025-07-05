@@ -1,20 +1,17 @@
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlencode
 
 from jinja2 import Template
+from yarl import URL
 
 from post_process import fmt, tz
 
 
 def generate_url(path: str, timestamp: str) -> str:
-    return "https://calendar.google.com/calendar/render?" + urlencode(
-        {
-            "cid": "http://mause.me/blueroom/"
-            + path
-            + "?"
-            + urlencode({"timestamp": timestamp})
-        }
+    return URL("https://calendar.google.com/calendar/render").with_query(
+        cid=str(
+            URL(f"http://mause.me/blueroom/{path}").with_query(timestamp=timestamp)
+        ),
     )
 
 
@@ -42,12 +39,11 @@ def main() -> None:
         files[0].stat().st_mtime, tz=timezone.utc
     ).astimezone(tz)
 
+    html = template.render(
+        timestamp=fmt(timestamp), files=list(files), generate_url=generate_url
+    )
     with open("output/index.html", "w") as fh:
-        fh.write(
-            template.render(
-                timestamp=fmt(timestamp), files=list(files), generate_url=generate_url
-            )
-        )
+        fh.write(html)
 
 
 if __name__ == "__main__":

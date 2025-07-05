@@ -1,9 +1,22 @@
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlencode
 
 from jinja2 import Template
 
 from post_process import fmt, tz
+
+
+def generate_url(path: str, timestamp: str) -> str:
+    return "https://calendar.google.com/calendar/render?" + urlencode(
+        {
+            "cid": "http://mause.me/blueroom/"
+            + path
+            + "?"
+            + urlencode({"timestamp": timestamp})
+        }
+    )
+
 
 template = Template(
     """\
@@ -12,7 +25,7 @@ template = Template(
 <ul>
 {% for file in files %}
 <li>
-<a href="{{file.name}}?timestamp={{timestamp | urlencode}}">Download {{file.stem}} iCal</a>
+<a href="{{generate_url(file.name, timestamp)}}">Add {{file.stem}} to Google Calendar</a>
 </li>
 {% endfor %}
 </ul>
@@ -30,7 +43,11 @@ def main() -> None:
     ).astimezone(tz)
 
     with open("output/index.html", "w") as fh:
-        fh.write(template.render(timestamp=fmt(timestamp), files=list(files)))
+        fh.write(
+            template.render(
+                timestamp=fmt(timestamp), files=list(files), generate_url=generate_url
+            )
+        )
 
 
 if __name__ == "__main__":

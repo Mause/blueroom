@@ -79,7 +79,6 @@ dev = [
     { name = "pdbpp" },
     { name = "pre-commit" },
     { name = "pudb" },
-    { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-sugar" },
     { name = "syrupy" },
@@ -105,7 +104,6 @@ dev = [
     { name = "pdbpp", specifier = ">=0.10.3" },
     { name = "pre-commit", specifier = ">=4.1.0" },
     { name = "pudb", specifier = ">=2024.1.3" },
-    { name = "pyright", specifier = ">=1.1.392.post0" },
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "pytest-sugar", specifier = ">=1.0.0" },
     { name = "syrupy", specifier = ">=4.8.1" },
@@ -936,19 +934,6 @@ name = "pyrepl"
 version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/05/1b/ea40363be0056080454cdbabe880773c3c5bd66d7b13f0c8b8b8c8da1e0c/pyrepl-0.9.0.tar.gz", hash = "sha256:292570f34b5502e871bbb966d639474f2b57fbfcd3373c2d6a2f3d56e681a775", size = 48744, upload-time = "2019-04-16T14:16:21.663Z" }
-
-[[package]]
-name = "pyright"
-version = "1.1.392.post0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "nodeenv" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/66/df/3c6f6b08fba7ccf49b114dfc4bb33e25c299883fd763f93fad47ef8bc58d/pyright-1.1.392.post0.tar.gz", hash = "sha256:3b7f88de74a28dcfa90c7d90c782b6569a48c2be5f9d4add38472bdaac247ebd", size = 3789911, upload-time = "2025-01-15T15:01:20.913Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e7/b1/a18de17f40e4f61ca58856b9ef9b0febf74ff88978c3f7776f910071f567/pyright-1.1.392.post0-py3-none-any.whl", hash = "sha256:252f84458a46fa2f0fd4e2f91fc74f50b9ca52c757062e93f6c250c0d8329eb2", size = 5595487, upload-time = "2025-01-15T15:01:17.775Z" },
-]
 
 [[package]]
 name = "pytest"

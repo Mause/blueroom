@@ -7,11 +7,13 @@ from yarl import URL
 from post_process import fmt, tz
 
 
-def generate_url(path: str, timestamp: str) -> URL:
+def generate_ical(path: str, timestamp: str) -> URL:
+    return URL(f"https://mause.me/blueroom/{path}").with_query(timestamp=timestamp)
+
+
+def generate_gcal(path: str, timestamp: str) -> URL:
     return URL("https://calendar.google.com/calendar/render").with_query(
-        cid=str(
-            URL(f"http://mause.me/blueroom/{path}").with_query(timestamp=timestamp)
-        ),
+        cid=str(generate_ical(path, timestamp).with_scheme("webcal")),
     )
 
 
@@ -22,7 +24,8 @@ template = Template(
 <ul>
 {% for file in files %}
 <li>
-<a href="{{generate_url(file.name, timestamp)}}">Add {{file.stem}} to Google Calendar</a>
+{{file.stem}}: 
+<a href="{{generate_gcal(file.name, timestamp)}}">Google Calendar</a>, <a href="{{generate_ical(file.name, timestamp)}}">iCal</a>
 </li>
 {% endfor %}
 </ul>
@@ -40,7 +43,10 @@ def main() -> None:
     ).astimezone(tz)
 
     html = template.render(
-        timestamp=fmt(timestamp), files=list(files), generate_url=generate_url
+        timestamp=fmt(timestamp),
+        files=files,
+        generate_ical=generate_ical,
+        generate_gcal=generate_gcal,
     )
     with open("output/index.html", "w") as fh:
         fh.write(html)

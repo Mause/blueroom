@@ -7,7 +7,7 @@ from yarl import URL
 from post_process import fmt, tz
 
 
-def generate_url(path: str, timestamp: str) -> str:
+def generate_url(path: str, timestamp: str) -> URL:
     return URL("https://calendar.google.com/calendar/render").with_query(
         cid=str(
             URL(f"http://mause.me/blueroom/{path}").with_query(timestamp=timestamp)

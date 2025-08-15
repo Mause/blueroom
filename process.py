@@ -81,14 +81,16 @@ def boop(
 async def get_show(
     domain: str, client: httpx.AsyncClient, key: str, event: FerveItem
 ) -> tuple[str, str | None]:
-    res = (
-        await client.get(
-            get_event_url(domain, event),
-            headers={"User-Agent": "Mozilla/5.0"},
-            follow_redirects=True,
-        )
-    ).text
-    soup = bs4.BeautifulSoup(res, "html.parser")
+    event_url = get_event_url(domain, event)
+    res = await client.get(
+        event_url,
+        headers={"User-Agent": "Mozilla/5.0"},
+        follow_redirects=True,
+    )
+    if not res.is_success:
+        logging.error("Failed to fetch %s: %s %s", key, event_url, res.status_code)
+        return (key, None)
+    soup = bs4.BeautifulSoup(res.text, "html.parser")
     html_desc = soup.css.select_one(".event-desc")
     return (key, str(html_desc) if html_desc else None)
 

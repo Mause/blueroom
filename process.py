@@ -57,6 +57,8 @@ def get_event_url(domain: str, event: FerveItem) -> str:
     path = event["URL"]
     if path.count("/") == 3:
         path = path.rsplit("/", 1)[0]
+    if '-Streaming' in path:
+        path = path.replace('-Streaming', '')
     return f"https://{domain}{path.lower()}/"
 
 

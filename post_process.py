@@ -68,7 +68,7 @@ def process(
                     fragment
                     for fragment in [
                         str(show.url),
-                        show.html_desc,
+                        (show.html_desc or show.desc),
                         f"Updated: {fmt(timestamp)}",
                     ]
                     if fragment

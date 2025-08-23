@@ -2,7 +2,7 @@
 # name: test_main
   '''
   {
-    "updated_at": "2025-08-23T15:40:42.142446+08:00",
+    "updated_at": "2023-10-01T00:00:00Z",
     "events": [
       {
         "item_hash": "abc123",

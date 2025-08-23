@@ -1,9 +1,11 @@
+from datetime import datetime, timezone
+
 import uvloop
 from httpx import Response
 from respx import MockRouter
 from syrupy.assertion import SnapshotAssertion
 
-from process import main
+from process import process_domain
 
 
 def test_main(respx_mock: MockRouter, snapshot: SnapshotAssertion) -> None:
@@ -41,8 +43,12 @@ def test_main(respx_mock: MockRouter, snapshot: SnapshotAssertion) -> None:
         )
     )
 
-    uvloop.run(main([]))
+    data = uvloop.run(
+        process_domain(
+            "blueroom.org.au", datetime(2023, 10, 1, 0, 0, 0, tzinfo=timezone.utc)
+        )
+    )
 
     snapshot.assert_match(
-        open("output/blueroom.org.au.json").read(),
+        data.model_dump_json(indent=2),
     )

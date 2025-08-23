@@ -101,6 +101,13 @@ async def get_show(
 
 async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
+
+    data = await process_domain(domain, datetime.now(tz))
+    with open(f"output/{domain}.json", "w") as f:
+        f.write(data.model_dump_json(indent=2))
+
+
+async def process_domain(domain: str, updated_at: datetime) -> Events:
     url = f"https://tix.{domain}/api/v1/Items/Browse"
     client = httpx.AsyncClient()
     data = cast(FerveBrowse, (await client.get(url)).json())
@@ -117,11 +124,10 @@ async def main(argv: list[str]) -> None:
             )
         )
     )
-    data = Events(
-        events=list(boop(domain, shows, descriptions)), updated_at=datetime.now(tz)
+    return Events(
+        events=list(boop(domain, shows, descriptions)),
+        updated_at=updated_at,
     )
-    with open(f"output/{domain}.json", "w") as f:
-        f.write(data.model_dump_json(indent=2))
 
 
 if __name__ == "__main__":

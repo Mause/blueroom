@@ -51,7 +51,7 @@ jobs:
           uv sync
       - run: uv run pytest
       - run: uv run make
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           path: output/*.ics
       - name: Upload artifact

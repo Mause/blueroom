@@ -57,11 +57,14 @@ def make_date(domain: str, date: FerveItem) -> Event.EventDate:
 def get_event_url(domain: str, event: FerveItem) -> str:
     path = event["URL"]
     if path.count("/") == 3:
+        # chop off date segment
         path = path.rsplit("/", 1)[0]
     if "-Streaming" in path:
         path = path.replace("-Streaming", "")
     if path == "/Events/O-D-E":
         path = "/Events/ODE"
+    if domain == "ourgoldenage.com.au":
+        path = path.replace("/Events/", "/films/")
     return f"https://{domain}{path.lower()}/"
 
 

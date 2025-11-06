@@ -9,7 +9,7 @@ from process import process_domain
 
 
 def test_main(respx_mock: MockRouter, snapshot: SnapshotAssertion) -> None:
-    respx_mock.get("https://blueroom.org.au/event/1/").mock(
+    respx_mock.get("https://blueroom.org.au/event/1").mock(
         Response(
             status_code=200,
             json={

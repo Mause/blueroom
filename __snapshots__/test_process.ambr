@@ -7,7 +7,7 @@
       {
         "item_hash": "abc123",
         "title": "Test Item 1",
-        "url": "https://blueroom.org.au/event/1/",
+        "url": "https://blueroom.org.au/event/1",
         "html_desc": null,
         "desc": "A brief description of Test Item 1.",
         "dates": [

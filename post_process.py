@@ -7,12 +7,14 @@ from icalendar import Calendar, Event, Timezone
 
 from models import Event as ShowEvent
 from models import Events
+from sent import monitor
 
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
 fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
 
 
+@monitor("post_process.main")
 def main() -> None:
     input_filename = Path(sys.argv[1])
     output_filename = input_filename.with_suffix(".ics")

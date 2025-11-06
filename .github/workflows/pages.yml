@@ -51,6 +51,8 @@ jobs:
           uv sync
       - run: uv run pytest
       - run: uv run make
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - uses: actions/upload-artifact@v4
         with:
           path: output/*.ics

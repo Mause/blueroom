@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from models import Event, Events, Status
 from post_process import tz
+from sent import monitor
 
 logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
@@ -99,6 +100,7 @@ async def get_show(
     return (key, str(html_desc) if html_desc else None)
 
 
+@monitor(monitor_slug="process.main")
 async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
 

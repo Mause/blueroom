@@ -1,7 +1,11 @@
+import logging
 import os
 
 import sentry_sdk
+from rich.logging import RichHandler
 from sentry_sdk.crons import monitor
+
+logging.getLogger().addHandler(RichHandler())
 
 __all__ = ["monitor"]
 

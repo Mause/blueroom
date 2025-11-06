@@ -35,6 +35,9 @@ defaults:
   run:
     shell: bash
 
+env:
+  FORCE_COLOR: 1
+
 jobs:
   # Build job
   build:

@@ -37,6 +37,7 @@ defaults:
 
 env:
   FORCE_COLOR: 1
+  TERMINAL_WIDTH: 800
 
 jobs:
   # Build job

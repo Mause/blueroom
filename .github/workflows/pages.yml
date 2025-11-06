@@ -48,10 +48,9 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-      - name: Install dependencies
-        run: |
-          pipx install uv
-          uv sync
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+      - run: uv sync
       - run: uv run pytest
       - run: uv run make
         env:

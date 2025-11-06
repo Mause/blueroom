@@ -5,7 +5,6 @@ from sentry_sdk.crons import monitor
 
 __all__ = ["monitor"]
 
-breakpoint()
 sentry_sdk.init(
     # Add data like request headers and IP for users,
     # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info

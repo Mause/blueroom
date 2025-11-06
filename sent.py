@@ -14,3 +14,9 @@ sentry_sdk.init(
     environment=os.getenv("GITHUB_REF_NAME", "development"),
     release=os.getenv("GITHUB_SHA", "unknown"),
 )
+
+client = sentry_sdk.get_current_scope().get_client()
+print(
+    "Sentry is",
+    "enabled" if client.is_active() and client.transport else "disabled",
+)

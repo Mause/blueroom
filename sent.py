@@ -2,10 +2,20 @@ import logging
 import os
 
 import sentry_sdk
+from rich.console import Console
 from rich.logging import RichHandler
 from sentry_sdk.crons import monitor
 
-logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
+logging.basicConfig(
+    level=logging.INFO,
+    handlers=[
+        RichHandler(
+            console=Console(
+                width=120,
+            )
+        )
+    ],
+)
 
 __all__ = ["monitor"]
 

@@ -56,8 +56,7 @@ def get_event_url(domain: str, event: FerveItem) -> str:
     if path.count("/") == 3:
         # chop off date segment
         path = path.rsplit("/", 1)[0]
-    if "-Streaming" in path:
-        path = path.replace("-Streaming", "")
+    path = path.replace("-Streaming", "").replace("-Online", "")
     if path == "/Events/O-D-E":
         path = "/Events/ODE"
     if domain == "ourgoldenage.com.au":

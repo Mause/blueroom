@@ -61,7 +61,7 @@ def get_event_url(domain: str, event: FerveItem) -> str:
         path = "/Events/ODE"
     if domain == "ourgoldenage.com.au":
         path = path.replace("/Events/", "/film/")
-    return f"https://{domain}{path.lower()}/"
+    return f"https://{domain}{path.lower()}"
 
 
 def boop(

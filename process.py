@@ -7,14 +7,11 @@ from typing import Callable, Generator, Iterable, TypedDict, cast
 import bs4
 import httpx
 import uvloop
-from rich.logging import RichHandler
 from tqdm import tqdm
 
 from models import Event, Events, Status
 from post_process import tz
 from sent import monitor
-
-logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
 
 
 class FerveItem(TypedDict):

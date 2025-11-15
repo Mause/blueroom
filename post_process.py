@@ -14,7 +14,7 @@ tz = zoneinfo.ZoneInfo("Australia/Perth")
 fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
 
 
-@monitor("post_process.main")
+@monitor("post_process.main", "pages")
 def main() -> None:
     input_filename = Path(sys.argv[1])
     output_filename = input_filename.with_suffix(".ics")

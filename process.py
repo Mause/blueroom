@@ -99,7 +99,7 @@ async def get_show(
     return (key, str(html_desc) if html_desc else None)
 
 
-@monitor(monitor_slug="process.main")
+@monitor("process.main", "pages")
 async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
 

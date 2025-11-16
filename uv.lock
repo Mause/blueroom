@@ -97,7 +97,7 @@ requires-dist = [
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "scrapy", specifier = ">=2.12.0" },
-    { name = "sentry-gha", git = "https://github.com/Mause/sentry-gha.git?rev=43b35f7bd3b28ad556c63088931e6586b28d7d8f1" },
+    { name = "sentry-gha", git = "https://github.com/Mause/sentry-gha.git?rev=a8226e5690b57ce812cfac33eb0cc196f1ca77c8" },
     { name = "sentry-sdk", specifier = ">=2.43.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
     { name = "uvloop", specifier = ">=0.21.0" },
@@ -1171,7 +1171,7 @@ wheels = [
 [[package]]
 name = "sentry-gha"
 version = "0.1.0"
-source = { git = "https://github.com/Mause/sentry-gha.git?rev=43b35f7bd3b28ad556c63088931e6586b28d7d8f1#43b35f7bd3b28ad556c63088931e6586b28d7d8f" }
+source = { git = "https://github.com/Mause/sentry-gha.git?rev=a8226e5690b57ce812cfac33eb0cc196f1ca77c8#a8226e5690b57ce812cfac33eb0cc196f1ca77c8" }
 dependencies = [
     { name = "rich" },
     { name = "ruamel-yaml" },

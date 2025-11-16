@@ -35,4 +35,4 @@ dev = [
 select = ["F", "I", "ANN"]
 
 [tool.uv.sources]
-sentry-gha = { git = "https://github.com/Mause/sentry-gha.git", rev = "43b35f7bd3b28ad556c63088931e6586b28d7d8f1" }
+sentry-gha = { git = "https://github.com/Mause/sentry-gha.git", rev = "a8226e5690b57ce812cfac33eb0cc196f1ca77c8" }

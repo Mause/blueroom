@@ -14,6 +14,8 @@ from models import Event, Events, Status
 from post_process import tz
 from sent import monitor
 
+logger = logging.getLogger(__name__)
+
 
 class FerveItem(TypedDict):
     Name: str
@@ -82,6 +84,9 @@ def boop(
                     make_date(domain, instance)
                     for instance in instances
                     if instance["DateTime"]
+                    or logger.warning(
+                        "Event %r has no date, skipping", instance["Name"]
+                    )
                 ],
             }
         )
@@ -97,7 +102,7 @@ async def get_show(
         follow_redirects=True,
     )
     if not res.is_success:
-        logging.error("Failed to fetch %s: %s %s", key, event_url, res.status_code)
+        logger.error("Failed to fetch %s: %s %s", key, event_url, res.status_code)
         return (key, None)
     soup = bs4.BeautifulSoup(res.text, "html.parser")
     html_desc = soup.css.select_one(".event-desc")

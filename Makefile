@@ -1,4 +1,4 @@
-all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/queerscreen.org.au output/index.html
+all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/queerscreen.org.au.ics output/index.html
 
 clean:
 	rm -rf output/*

@@ -11,7 +11,7 @@ from sent import monitor
 
 tz = zoneinfo.ZoneInfo("Australia/Perth")
 
-fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y")
+fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y %Z")
 
 
 @monitor("post_process.main", "pages")

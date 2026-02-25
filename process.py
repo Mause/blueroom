@@ -137,6 +137,7 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
         )
     )
     return Events(
+        timezone=str(tz),
         events=list(boop(domain, shows, descriptions)),
         updated_at=updated_at,
     )

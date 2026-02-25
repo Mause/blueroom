@@ -19,6 +19,7 @@ def test_post_process_event(snapshot: SnapshotAssertion) -> None:
     output = process(
         Events.model_validate(
             {
+                "timezone": "Australia/Perth",
                 "events": [
                     {
                         "item_hash": "123",
@@ -51,6 +52,7 @@ def test_unusual_dates(snapshot: SnapshotAssertion) -> None:
     output = process(
         Events.model_validate(
             {
+                "timezone": "Australia/Perth",
                 "events": [
                     {
                         "item_hash": "ab14eaecc5144650a99de68d3f64bbca",

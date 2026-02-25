@@ -2,13 +2,13 @@ import logging
 import sys
 from asyncio import gather
 from datetime import datetime, timedelta
-from typing import Callable, Generator, Iterable, TypedDict, cast
+from typing import Callable, Generator, Iterable
 
 import bs4
 import httpx
 import uvloop
 from httpx_retries import Retry, RetryTransport
-from pydantic import BaseModel
+from pydantic import AwareDatetime, BaseModel
 from tqdm import tqdm
 
 from models import Event, Events, Status
@@ -24,7 +24,7 @@ class FerveItem(BaseModel):
     Hash: str
     DescriptionBrief: str
     Runtime: int
-    DateTime: str | None
+    DateTime: AwareDatetime | None
     VenueName: str
     Status: int
 
@@ -41,7 +41,7 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
 
 
 def make_date(domain: str, date: FerveItem) -> Event.EventDate:
-    start = datetime.fromisoformat(date.DateTime).replace(tzinfo=tz)
+    start = date.DateTime.replace(tzinfo=tz)
     duration = timedelta(minutes=date.Runtime)
 
     return Event.EventDate.model_validate(

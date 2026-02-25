@@ -8,6 +8,7 @@ import bs4
 import httpx
 import uvloop
 from httpx_retries import Retry, RetryTransport
+from pydantic import BaseModel
 from tqdm import tqdm
 
 from models import Event, Events, Status
@@ -17,7 +18,7 @@ from sent import monitor
 logger = logging.getLogger(__name__)
 
 
-class FerveItem(TypedDict):
+class FerveItem(BaseModel):
     Name: str
     URL: str
     Hash: str
@@ -28,7 +29,7 @@ class FerveItem(TypedDict):
     Status: int
 
 
-class FerveBrowse(TypedDict):
+class FerveBrowse(BaseModel):
     Items: list[FerveItem]
 
 
@@ -40,22 +41,22 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
 
 
 def make_date(domain: str, date: FerveItem) -> Event.EventDate:
-    start = datetime.fromisoformat(date["DateTime"]).replace(tzinfo=tz)
-    duration = timedelta(minutes=date["Runtime"])
+    start = datetime.fromisoformat(date.DateTime).replace(tzinfo=tz)
+    duration = timedelta(minutes=date.Runtime)
 
     return Event.EventDate.model_validate(
         {
             "start": start,
             "end": (start + duration),
-            "venue": date["VenueName"],
-            "status": Status(date["Status"]),
-            "url": f"https://tix.{domain}" + date["URL"],
+            "venue": date.VenueName,
+            "status": Status(date.Status),
+            "url": f"https://tix.{domain}" + date.URL,
         }
     )
 
 
 def get_event_url(domain: str, event: FerveItem) -> str:
-    path = event["URL"]
+    path = event.URL
     if path.count("/") == 3:
         # chop off date segment
         path = path.rsplit("/", 1)[0]
@@ -75,18 +76,16 @@ def boop(
         meta = descriptions[show]
         yield Event.model_validate(
             {
-                "item_hash": i["Hash"],
-                "title": i["Name"],
+                "item_hash": i.Hash,
+                "title": i.Name,
                 "url": get_event_url(domain, i),
                 "html_desc": meta,
-                "desc": i["DescriptionBrief"],
+                "desc": i.DescriptionBrief,
                 "dates": [
                     make_date(domain, instance)
                     for instance in instances
-                    if instance["DateTime"]
-                    or logger.warning(
-                        "Event %r has no date, skipping", instance["Name"]
-                    )
+                    if instance.DateTime
+                    or logger.warning("Event %r has no date, skipping", instance.Name)
                 ],
             }
         )
@@ -123,9 +122,9 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
     retry = Retry(total=5, backoff_factor=0.5)
     transport = RetryTransport(retry=retry)
     client = httpx.AsyncClient(transport=transport)
-    data = cast(FerveBrowse, (await client.get(url)).json())
+    data = FerveBrowse.model_validate((await client.get(url)).json())
     shows: dict[str, list[FerveItem]] = groupby(
-        data["Items"], lambda x: x["Name"].replace(" - Opening Night", "")
+        data.Items, lambda x: x.Name.replace(" - Opening Night", "")
     )
     descriptions = dict(
         tqdm(

@@ -4,7 +4,7 @@ from pathlib import Path
 from jinja2 import Template
 from yarl import URL
 
-from post_process import fmt, tz
+from post_process import PERTH, fmt
 
 
 def generate_ical(path: str, updated_at: str) -> URL:
@@ -40,7 +40,7 @@ def main() -> None:
     files = list(Path("output").glob("*.ics"))
     updated_at = datetime.fromtimestamp(
         files[0].stat().st_mtime, tz=timezone.utc
-    ).astimezone(tz)
+    ).astimezone(PERTH)
 
     html = template.render(
         updated_at=fmt(updated_at),

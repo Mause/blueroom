@@ -4,9 +4,9 @@ from pathlib import Path
 from syrupy.assertion import SnapshotAssertion
 
 from models import Events
-from post_process import process, tz
+from post_process import process, PERTH
 
-dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=tz)
+dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=PERTH)
 
 
 def test_post_process(snapshot: SnapshotAssertion) -> None:

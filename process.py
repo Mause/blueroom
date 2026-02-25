@@ -12,7 +12,7 @@ from pydantic import BaseModel, NaiveDatetime
 from tqdm import tqdm
 
 from models import Event, Events, Status
-from post_process import tz
+from post_process import PERTH
 from sent import monitor
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
 
 
 def make_date(domain: str, date: FerveItem) -> Event.EventDate:
-    start = date.DateTime.replace(tzinfo=tz)
+    start = date.DateTime.replace(tzinfo=PERTH)
     duration = timedelta(minutes=date.Runtime)
 
     return Event.EventDate.model_validate(
@@ -112,7 +112,7 @@ async def get_show(
 async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
 
-    data = await process_domain(domain, datetime.now(tz))
+    data = await process_domain(domain, datetime.now(PERTH))
     with open(f"output/{domain}.json", "w") as f:
         f.write(data.model_dump_json(indent=2))
 

@@ -9,7 +9,7 @@ from models import Event as ShowEvent
 from models import Events
 from sent import monitor
 
-tz = zoneinfo.ZoneInfo("Australia/Perth")
+PERTH = zoneinfo.ZoneInfo("Australia/Perth")
 
 fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y %Z")
 
@@ -63,8 +63,8 @@ def process(
             event.add("last-modified", updated_at)
             event.add("dtstamp", updated_at)
             # TODO: can we remove this timezone conversion?
-            event.add("dtstart", date.start.astimezone(tz))
-            event.add("dtend", date.end.astimezone(tz))
+            event.add("dtstart", date.start.astimezone(PERTH))
+            event.add("dtend", date.end.astimezone(PERTH))
             event.add("location", date.venue)
             event.add(
                 "description",

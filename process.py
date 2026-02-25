@@ -23,7 +23,7 @@ class FerveItem(TypedDict):
     Hash: str
     DescriptionBrief: str
     Runtime: int
-    DateTime: str
+    DateTime: str | None
     VenueName: str
     Status: int
 

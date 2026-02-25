@@ -86,7 +86,7 @@
   DTSTAMP:20200101T040000Z
   UID:123 2020-01-01T14:00:00+08:00
   DESCRIPTION:https://example.com/\n\n<p>This is a test event</p>\n\nUpdated
-   : 12:00PM\, January  1\, 2020
+   : 12:00PM\, January  1\, 2020 AWST
   LAST-MODIFIED:20200101T040000Z
   LOCATION:Backrooms
   END:VEVENT
@@ -139,7 +139,7 @@
   DTSTAMP:20200101T040000Z
   UID:ab14eaecc5144650a99de68d3f64bbca 2025-07-04T18:30:00+08:00
   DESCRIPTION:https://blueroom.org.au/events/love-stories/\n\nThousands\n\nU
-   pdated: 12:00PM\, January  1\, 2020
+   pdated: 12:00PM\, January  1\, 2020 AWST
   LAST-MODIFIED:20200101T040000Z
   LOCATION:Kaos Room
   END:VEVENT
@@ -150,7 +150,7 @@
   DTSTAMP:20200101T040000Z
   UID:ab14eaecc5144650a99de68d3f64bbca 2025-07-05T14:00:00+08:00
   DESCRIPTION:https://blueroom.org.au/events/love-stories/\n\nThousands\n\nU
-   pdated: 12:00PM\, January  1\, 2020
+   pdated: 12:00PM\, January  1\, 2020 AWST
   LAST-MODIFIED:20200101T040000Z
   LOCATION:Kaos Room
   END:VEVENT

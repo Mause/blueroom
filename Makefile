@@ -17,7 +17,7 @@ output/%.ics: output/%.json post_process.py
 	python post_process.py $< $@
 	docker run --rm -v $(shell pwd):/data faph/icalendar-validator /data/$@
 
-output/%.json:
+output/%.json: process.py
 	python process.py $(*F)
 
 output/index.html: website index.py

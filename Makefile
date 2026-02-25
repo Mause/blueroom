@@ -1,9 +1,12 @@
-all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/index.html
+.PHONY: all clean force
+
+all: output/blueroom.org.au.ics output/ourgoldenage.com.au.ics output/queerscreen.org.au.ics output/index.html
 
 clean:
 	rm -rf output/*
 
 website:
+	touch website
 
 force:
 	touch website
@@ -17,7 +20,7 @@ output/%.ics: output/%.json post_process.py
 	python post_process.py $< $@
 	docker run --rm -v $(shell pwd):/data faph/icalendar-validator /data/$@
 
-output/%.json:
+output/%.json: website process.py
 	python process.py $(*F)
 
 output/index.html: website index.py

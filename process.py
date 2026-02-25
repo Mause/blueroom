@@ -7,11 +7,14 @@ from typing import Callable, Generator, Iterable, TypedDict, cast
 import bs4
 import httpx
 import uvloop
+from httpx_retries import Retry, RetryTransport
 from tqdm import tqdm
 
 from models import Event, Events, Status
 from post_process import tz
 from sent import monitor
+
+logger = logging.getLogger(__name__)
 
 
 class FerveItem(TypedDict):
@@ -20,7 +23,7 @@ class FerveItem(TypedDict):
     Hash: str
     DescriptionBrief: str
     Runtime: int
-    DateTime: str
+    DateTime: str | None
     VenueName: str
     Status: int
 
@@ -77,7 +80,14 @@ def boop(
                 "url": get_event_url(domain, i),
                 "html_desc": meta,
                 "desc": i["DescriptionBrief"],
-                "dates": [make_date(domain, instance) for instance in instances],
+                "dates": [
+                    make_date(domain, instance)
+                    for instance in instances
+                    if instance["DateTime"]
+                    or logger.warning(
+                        "Event %r has no date, skipping", instance["Name"]
+                    )
+                ],
             }
         )
 
@@ -92,7 +102,7 @@ async def get_show(
         follow_redirects=True,
     )
     if not res.is_success:
-        logging.error("Failed to fetch %s: %s %s", key, event_url, res.status_code)
+        logger.error("Failed to fetch %s: %s %s", key, event_url, res.status_code)
         return (key, None)
     soup = bs4.BeautifulSoup(res.text, "html.parser")
     html_desc = soup.css.select_one(".event-desc")
@@ -110,7 +120,9 @@ async def main(argv: list[str]) -> None:
 
 async def process_domain(domain: str, updated_at: datetime) -> Events:
     url = f"https://tix.{domain}/api/v1/Items/Browse"
-    client = httpx.AsyncClient()
+    retry = Retry(total=5, backoff_factor=0.5)
+    transport = RetryTransport(retry=retry)
+    client = httpx.AsyncClient(transport=transport)
     data = cast(FerveBrowse, (await client.get(url)).json())
     shows: dict[str, list[FerveItem]] = groupby(
         data["Items"], lambda x: x["Name"].replace(" - Opening Night", "")

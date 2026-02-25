@@ -8,7 +8,7 @@ import bs4
 import httpx
 import uvloop
 from httpx_retries import Retry, RetryTransport
-from pydantic import AwareDatetime, BaseModel
+from pydantic import BaseModel, NaiveDatetime
 from tqdm import tqdm
 
 from models import Event, Events, Status
@@ -24,7 +24,7 @@ class FerveItem(BaseModel):
     Hash: str
     DescriptionBrief: str
     Runtime: int
-    DateTime: AwareDatetime | None
+    DateTime: NaiveDatetime | None
     VenueName: str
     Status: int
 

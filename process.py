@@ -108,9 +108,14 @@ async def main(argv: list[str]) -> None:
         f.write(data.model_dump_json(indent=2))
 
 
+from httpx_retries import Retry, RetryTransport
+
+
 async def process_domain(domain: str, updated_at: datetime) -> Events:
     url = f"https://tix.{domain}/api/v1/Items/Browse"
-    client = httpx.AsyncClient()
+    retry = Retry(total=5, backoff_factor=0.5)
+    transport = RetryTransport(retry=retry)
+    client = httpx.AsyncClient(transport=transport)
     data = cast(FerveBrowse, (await client.get(url)).json())
     shows: dict[str, list[FerveItem]] = groupby(
         data["Items"], lambda x: x["Name"].replace(" - Opening Night", "")

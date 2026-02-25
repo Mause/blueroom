@@ -7,6 +7,7 @@ from typing import Callable, Generator, Iterable, TypedDict, cast
 import bs4
 import httpx
 import uvloop
+from httpx_retries import Retry, RetryTransport
 from tqdm import tqdm
 
 from models import Event, Events, Status
@@ -110,9 +111,6 @@ async def main(argv: list[str]) -> None:
     data = await process_domain(domain, datetime.now(tz))
     with open(f"output/{domain}.json", "w") as f:
         f.write(data.model_dump_json(indent=2))
-
-
-from httpx_retries import Retry, RetryTransport
 
 
 async def process_domain(domain: str, updated_at: datetime) -> Events:

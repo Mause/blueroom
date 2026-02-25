@@ -36,7 +36,7 @@ def test_main(respx_mock: MockRouter, snapshot: SnapshotAssertion) -> None:
                         "Status": 0,
                         "VenueName": "Test Venue",
                         "Runtime": 120,
-                        "DateTime": "2023-10-01T00:00:00Z",
+                        "DateTime": "2023-10-01T00:00:00",
                     }
                 ]
             },

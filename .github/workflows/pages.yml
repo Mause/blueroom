@@ -55,7 +55,7 @@ jobs:
       - run: uv run make
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           path: output/*.ics
       - name: Upload artifact

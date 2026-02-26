@@ -136,8 +136,20 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
             )
         )
     )
+
+    offset = data.Now.tzinfo.utcoffset(data.Now)
+    SECONDS_IN_HOUR = timedelta(hours=1).total_seconds()
+    assert offset
+    match offset.total_seconds() / SECONDS_IN_HOUR:
+        case 11:
+            timezone = "Australia/Melbourne"
+        case 8:
+            timezone = "Australia/Perth"
+        case _:
+            raise Exception(f"Unknown zone: {offset}")
+
     return Events(
-        timezone=str(tz),
+        timezone=timezone,
         events=list(boop(domain, shows, descriptions)),
         updated_at=updated_at,
     )

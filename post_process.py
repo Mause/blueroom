@@ -47,8 +47,8 @@ def process(data: Events, updated_at: datetime, output_filename: Path) -> bytes:
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 
-    cal.add_component(Timezone.from_tzinfo(tz))
-    cal.add("X-WR-TIMEZONE", "Australia/Perth")
+    cal.add_component(Timezone.from_tzid(data.timezone))
+    cal.add("X-WR-TIMEZONE", data.timezone)
 
     for show in data.events:
         for date in show.dates:

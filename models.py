@@ -1,6 +1,6 @@
 import zoneinfo
 from enum import Enum
-from typing import Any
+from typing import Annotated, Any
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, GetCoreSchemaHandler
 from pydantic_core import core_schema
@@ -43,6 +43,6 @@ class Timezone:
 
 
 class Events(BaseModel):
-    timezone: Timezone
+    timezone: Annotated[str, Timezone]
     updated_at: AwareDatetime
     events: list[Event]

@@ -47,6 +47,7 @@ def process(data: Events, updated_at: datetime, output_filename: Path) -> bytes:
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 
+    tz = zoneinfo.ZoneInfo(data.timezone)
     cal.add_component(Timezone.from_tzid(data.timezone))
     cal.add("X-WR-TIMEZONE", data.timezone)
 
@@ -58,8 +59,8 @@ def process(data: Events, updated_at: datetime, output_filename: Path) -> bytes:
             event.add("last-modified", updated_at)
             event.add("dtstamp", updated_at)
             # TODO: can we remove this timezone conversion?
-            event.add("dtstart", date.start.astimezone(PERTH))
-            event.add("dtend", date.end.astimezone(PERTH))
+            event.add("dtstart", date.start.astimezone(tz))
+            event.add("dtend", date.end.astimezone(tz))
             event.add("location", date.venue)
             event.add(
                 "description",

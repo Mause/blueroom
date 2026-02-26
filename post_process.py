@@ -5,7 +5,6 @@ from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
 
-from models import Event as ShowEvent
 from models import Events
 from sent import monitor
 
@@ -24,17 +23,13 @@ def main() -> None:
 
     updated_at = data.updated_at
 
-    output = process(
-        data.events, updated_at=updated_at, output_filename=output_filename
-    )
+    output = process(data, updated_at=updated_at, output_filename=output_filename)
 
     with open(output_filename, "wb") as fh:
         fh.write(output)
 
 
-def process(
-    shows: list[ShowEvent], updated_at: datetime, output_filename: Path
-) -> bytes:
+def process(data: Events, updated_at: datetime, output_filename: Path) -> bytes:
     cal = Calendar()
 
     name = f"{output_filename.stem} calendar".title()
@@ -55,7 +50,7 @@ def process(
     cal.add_component(Timezone.from_tzinfo(tz))
     cal.add("X-WR-TIMEZONE", "Australia/Perth")
 
-    for show in shows:
+    for show in data.events:
         for date in show.dates:
             event = Event()
             event.add("uid", f"{show.item_hash} {date.start.isoformat()}")

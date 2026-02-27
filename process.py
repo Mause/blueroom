@@ -1,3 +1,4 @@
+import json
 import logging
 import sys
 from asyncio import gather
@@ -122,7 +123,10 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
     retry = Retry(total=5, backoff_factor=0.5)
     transport = RetryTransport(retry=retry)
     client = httpx.AsyncClient(transport=transport)
-    data = FerveBrowse.model_validate((await client.get(url)).json())
+    data = (await client.get(url)).json()
+    with open(f"output/{domain}.raw.json", "w") as fh:
+        json.dump(data, fh, indent=2)
+    data = FerveBrowse.model_validate(data)
     shows: dict[str, list[FerveItem]] = groupby(
         data.Items, lambda x: x.Name.replace(" - Opening Night", "")
     )

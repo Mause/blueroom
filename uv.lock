@@ -101,7 +101,7 @@ requires-dist = [
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "scrapy", specifier = ">=2.12.0" },
-    { name = "sentry-gha", git = "https://github.com/Mause/sentry-gha.git?rev=fc6777aa30708f8312e06914fcd22358979ab5b9" },
+    { name = "sentry-gha", git = "https://github.com/Mause/sentry-gha.git?rev=30c7f309833ecf71842babaefb43870657dde2b2" },
     { name = "sentry-sdk", specifier = ">=2.43.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
     { name = "uvloop", specifier = ">=0.21.0" },
@@ -1208,7 +1208,7 @@ wheels = [
 [[package]]
 name = "sentry-gha"
 version = "0.1.0"
-source = { git = "https://github.com/Mause/sentry-gha.git?rev=fc6777aa30708f8312e06914fcd22358979ab5b9#fc6777aa30708f8312e06914fcd22358979ab5b9" }
+source = { git = "https://github.com/Mause/sentry-gha.git?rev=30c7f309833ecf71842babaefb43870657dde2b2#30c7f309833ecf71842babaefb43870657dde2b2" }
 dependencies = [
     { name = "cron-converter" },
     { name = "rich" },

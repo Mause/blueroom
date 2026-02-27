@@ -117,7 +117,7 @@ async def get_show(
 async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
 
-    data = await process_domain(domain, datetime.now(PERTH))
+    data = await process_domain(domain, updated_at=datetime.now(PERTH))
     with open(f"output/{domain}.json", "w") as f:
         f.write(data.model_dump_json(indent=2))
 
@@ -141,7 +141,7 @@ def get_timezone(domain: str) -> str:
     return timezone
 
 
-async def process_domain(domain: str, updated_at: datetime) -> Events:
+async def process_domain(domain: str, *, updated_at: datetime) -> Events:
     timezone = get_timezone(domain)
 
     url = f"https://tix.{domain}/api/v1/Items/Browse"

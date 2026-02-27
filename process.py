@@ -4,10 +4,12 @@ import sys
 from asyncio import gather
 from datetime import datetime, timedelta
 from typing import Callable, Generator, Iterable
+from zoneinfo import ZoneInfo
 
 import bs4
 import httpx
 import uvloop
+from guava_preconditions import checkNotNull
 from httpx_retries import Retry, RetryTransport
 from pydantic import BaseModel, NaiveDatetime
 from tqdm import tqdm
@@ -42,7 +44,9 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
 
 
 def make_date(domain: str, date: FerveItem) -> Event.EventDate:
-    start = date.DateTime.replace(tzinfo=PERTH)
+    start = checkNotNull(date.DateTime, "DateTime").replace(
+        tzinfo=ZoneInfo(get_timezone(domain))
+    )
     duration = timedelta(minutes=date.Runtime)
 
     return Event.EventDate.model_validate(

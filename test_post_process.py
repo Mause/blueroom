@@ -4,13 +4,17 @@ from pathlib import Path
 from syrupy.assertion import SnapshotAssertion
 
 from models import Events
-from post_process import process, tz
+from post_process import PERTH, process
 
-dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=tz)
+dt = datetime(2020, 1, 1, 12, 0, 0, tzinfo=PERTH)
 
 
 def test_post_process(snapshot: SnapshotAssertion) -> None:
-    output = process([], dt, output_filename=Path("output/dates.ics")).decode()
+    output = process(
+        Events(timezone="Australia/Perth", updated_at=dt, events=[]),
+        dt,
+        output_filename=Path("output/dates.ics"),
+    ).decode()
 
     assert output == snapshot
 
@@ -19,6 +23,7 @@ def test_post_process_event(snapshot: SnapshotAssertion) -> None:
     output = process(
         Events.model_validate(
             {
+                "timezone": "Australia/Perth",
                 "events": [
                     {
                         "item_hash": "123",
@@ -39,7 +44,7 @@ def test_post_process_event(snapshot: SnapshotAssertion) -> None:
                 ],
                 "updated_at": dt,
             }
-        ).events,
+        ),
         dt,
         output_filename=Path("output/dates.ics"),
     ).decode()
@@ -51,6 +56,7 @@ def test_unusual_dates(snapshot: SnapshotAssertion) -> None:
     output = process(
         Events.model_validate(
             {
+                "timezone": "Australia/Perth",
                 "events": [
                     {
                         "item_hash": "ab14eaecc5144650a99de68d3f64bbca",
@@ -78,7 +84,7 @@ def test_unusual_dates(snapshot: SnapshotAssertion) -> None:
                 ],
                 "updated_at": dt,
             }
-        ).events,
+        ),
         dt,
         output_filename=Path("output/unusual_dates.ics"),
     ).decode()

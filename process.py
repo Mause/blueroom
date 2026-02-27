@@ -1,18 +1,21 @@
+import json
 import logging
 import sys
 from asyncio import gather
 from datetime import datetime, timedelta
 from typing import Callable, Generator, Iterable
+from zoneinfo import ZoneInfo
 
 import bs4
 import httpx
 import uvloop
+from guava_preconditions import checkNotNull
 from httpx_retries import Retry, RetryTransport
 from pydantic import BaseModel, NaiveDatetime
 from tqdm import tqdm
 
 from models import Event, Events, Status
-from post_process import tz
+from post_process import PERTH
 from sent import monitor
 
 logger = logging.getLogger(__name__)
@@ -41,7 +44,9 @@ def groupby[K, V](iterable: Iterable[V], key: Callable[[V], K]) -> dict[K, list[
 
 
 def make_date(domain: str, date: FerveItem) -> Event.EventDate:
-    start = date.DateTime.replace(tzinfo=tz)
+    start = checkNotNull(date.DateTime, "DateTime").replace(
+        tzinfo=ZoneInfo(get_timezone(domain))
+    )
     duration = timedelta(minutes=date.Runtime)
 
     return Event.EventDate.model_validate(
@@ -112,20 +117,44 @@ async def get_show(
 async def main(argv: list[str]) -> None:
     domain = argv[0] if argv else "blueroom.org.au"
 
-    data = await process_domain(domain, datetime.now(tz))
+    data = await process_domain(domain, updated_at=datetime.now(PERTH))
     with open(f"output/{domain}.json", "w") as f:
         f.write(data.model_dump_json(indent=2))
 
 
-async def process_domain(domain: str, updated_at: datetime) -> Events:
-    url = f"https://tix.{domain}/api/v1/Items/Browse"
+def get_client() -> httpx.AsyncClient:
     retry = Retry(total=5, backoff_factor=0.5)
     transport = RetryTransport(retry=retry)
-    client = httpx.AsyncClient(transport=transport)
-    data = FerveBrowse.model_validate((await client.get(url)).json())
+    return httpx.AsyncClient(transport=transport)
+
+
+def get_timezone(domain: str) -> str:
+    match domain:
+        case "blueroom.org.au":
+            timezone = "Australia/Perth"
+        case "ourgoldenage.com.au":
+            timezone = "Australia/Sydney"
+        case "queerscreen.org.au":
+            timezone = "Australia/Sydney"
+        case _:
+            raise Exception(f"Unknown zone: {domain}")
+    return timezone
+
+
+async def process_domain(domain: str, *, updated_at: datetime) -> Events:
+    timezone = get_timezone(domain)
+
+    url = f"https://tix.{domain}/api/v1/Items/Browse"
+    client = get_client()
+
+    data = (await client.get(url)).json()
+    with open(f"output/{domain}.raw.json", "w") as fh:
+        json.dump(data, fh, indent=2)
+    data = FerveBrowse.model_validate(data)
     shows: dict[str, list[FerveItem]] = groupby(
         data.Items, lambda x: x.Name.replace(" - Opening Night", "")
     )
+
     descriptions = dict(
         tqdm(
             await gather(
@@ -136,7 +165,9 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
             )
         )
     )
+
     return Events(
+        timezone=timezone,
         events=list(boop(domain, shows, descriptions)),
         updated_at=updated_at,
     )

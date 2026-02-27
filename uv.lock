@@ -62,6 +62,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "bs4" },
+    { name = "guava-preconditions" },
     { name = "httpx" },
     { name = "httpx-retries" },
     { name = "icalendar" },
@@ -91,6 +92,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "bs4", specifier = ">=0.0.2" },
+    { name = "guava-preconditions", specifier = ">=0.1.4" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "httpx-retries", specifier = ">=0.4.6" },
     { name = "icalendar", specifier = ">=6.1.1" },
@@ -315,6 +317,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/dc/9c/0b15fb47b464e1b663b1acd1253a062aa5feecb07d4e597daea542ebd2b5/filelock-3.17.0.tar.gz", hash = "sha256:ee4e77401ef576ebb38cd7f13b9b28893194acc20a8e68e18730ba9c0e54660e", size = 18027, upload-time = "2025-01-21T20:04:49.099Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/89/ec/00d68c4ddfedfe64159999e5f8a98fb8442729a63e2077eb9dcd89623d27/filelock-3.17.0-py3-none-any.whl", hash = "sha256:533dc2f7ba78dc2f0f531fc6c4940addf7b70a481e269a5a3b93be94ffbe8338", size = 16164, upload-time = "2025-01-21T20:04:47.734Z" },
+]
+
+[[package]]
+name = "guava-preconditions"
+version = "0.1.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/bc/e84ad7db3fe6215d33abcf6008897db2ffad8566b5ed99276a481bc015f4/guava_preconditions-0.1.4.tar.gz", hash = "sha256:99088bc06a69e67d0d76e0221fc8850dfd258e083b0fc4a26ebce92eed21130d", size = 2972, upload-time = "2021-10-22T00:34:19.952Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/32/02/27fdaa2865b4520030fb13773cf9dd5b67f3d3c43b277f131f789534f675/guava_preconditions-0.1.4-py3-none-any.whl", hash = "sha256:c3e4705319ae46e4e694f87b481c745e2cb95c747f596754d830837a50ed81be", size = 3378, upload-time = "2021-10-22T00:34:18.965Z" },
 ]
 
 [[package]]

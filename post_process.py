@@ -5,11 +5,10 @@ from pathlib import Path
 
 from icalendar import Calendar, Event, Timezone
 
-from models import Event as ShowEvent
 from models import Events
 from sent import monitor
 
-tz = zoneinfo.ZoneInfo("Australia/Perth")
+PERTH = zoneinfo.ZoneInfo("Australia/Perth")
 
 fmt = lambda dt: dt.strftime("%l:%M%p, %B %e, %Y %Z")
 
@@ -24,17 +23,13 @@ def main() -> None:
 
     updated_at = data.updated_at
 
-    output = process(
-        data.events, updated_at=updated_at, output_filename=output_filename
-    )
+    output = process(data, updated_at=updated_at, output_filename=output_filename)
 
     with open(output_filename, "wb") as fh:
         fh.write(output)
 
 
-def process(
-    shows: list[ShowEvent], updated_at: datetime, output_filename: Path
-) -> bytes:
+def process(data: Events, updated_at: datetime, output_filename: Path) -> bytes:
     cal = Calendar()
 
     name = f"{output_filename.stem} calendar".title()
@@ -52,17 +47,17 @@ def process(
     cal.add("REFRESH-INTERVAL", refresh_interval, parameters={"value": "DURATION"})
     cal.add("X-PUBLISHED-TTL", refresh_interval)
 
+    tz = zoneinfo.ZoneInfo(data.timezone)
     cal.add_component(Timezone.from_tzinfo(tz))
-    cal.add("X-WR-TIMEZONE", "Australia/Perth")
+    cal.add("X-WR-TIMEZONE", data.timezone)
 
-    for show in shows:
+    for show in data.events:
         for date in show.dates:
             event = Event()
             event.add("uid", f"{show.item_hash} {date.start.isoformat()}")
             event.add("summary", f"{show.title} (Tickets {date.status.name})")
             event.add("last-modified", updated_at)
             event.add("dtstamp", updated_at)
-            # TODO: can we remove this timezone conversion?
             event.add("dtstart", date.start.astimezone(tz))
             event.add("dtend", date.end.astimezone(tz))
             event.add("location", date.venue)

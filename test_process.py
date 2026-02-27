@@ -45,7 +45,8 @@ def test_main(respx_mock: MockRouter, snapshot: SnapshotAssertion) -> None:
 
     data = uvloop.run(
         process_domain(
-            "blueroom.org.au", datetime(2023, 10, 1, 0, 0, 0, tzinfo=timezone.utc)
+            "blueroom.org.au",
+            updated_at=datetime(2023, 10, 1, 0, 0, 0, tzinfo=timezone.utc),
         )
     )
 

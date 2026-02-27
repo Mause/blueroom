@@ -101,7 +101,7 @@ requires-dist = [
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "scrapy", specifier = ">=2.12.0" },
-    { name = "sentry-gha", git = "https://github.com/Mause/sentry-gha.git?rev=a8226e5690b57ce812cfac33eb0cc196f1ca77c8" },
+    { name = "sentry-gha", git = "https://github.com/Mause/sentry-gha.git?rev=fc6777aa30708f8312e06914fcd22358979ab5b9" },
     { name = "sentry-sdk", specifier = ">=2.43.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
     { name = "uvloop", specifier = ">=0.21.0" },
@@ -233,6 +233,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/4d/6f/cb2a94494ff74aa9528a36c5b1422756330a75a8367bf20bd63171fc324d/constantly-23.10.4.tar.gz", hash = "sha256:aa92b70a33e2ac0bb33cd745eb61776594dc48764b06c35e0efd050b7f1c7cbd", size = 13300, upload-time = "2023-10-28T23:18:24.316Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b8/40/c199d095151addf69efdb4b9ca3a4f20f70e20508d6222bffb9b76f58573/constantly-23.10.4-py3-none-any.whl", hash = "sha256:3fd9b4d1c3dc1ec9757f3c52aef7e53ad9323dbe39f51dfd4c43853b68dfa3f9", size = 13547, upload-time = "2023-10-28T23:18:23.038Z" },
+]
+
+[[package]]
+name = "cron-converter"
+version = "1.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "python-dateutil" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/75/1a/b670d969f3cf6a46322f3d28f7fd6d13294d4f20a5e132beacb1ee1981b9/cron_converter-1.3.1.tar.gz", hash = "sha256:53eb26be3eb2e0f206a6e227ca0c19b3807b44a24b39f4eda3718703e6474f4a", size = 15738, upload-time = "2025-12-02T19:03:33.633Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/da/9e/4285b91b03ad0d641fefaa69cc39cd7978106c40f729ac0052dd98a44204/cron_converter-1.3.1-py3-none-any.whl", hash = "sha256:60c645532802e12ad09097091a5ec83a79b9b1064374e89edb0facf2ba36a697", size = 14242, upload-time = "2025-12-02T19:03:32.306Z" },
 ]
 
 [[package]]
@@ -1196,8 +1208,9 @@ wheels = [
 [[package]]
 name = "sentry-gha"
 version = "0.1.0"
-source = { git = "https://github.com/Mause/sentry-gha.git?rev=a8226e5690b57ce812cfac33eb0cc196f1ca77c8#a8226e5690b57ce812cfac33eb0cc196f1ca77c8" }
+source = { git = "https://github.com/Mause/sentry-gha.git?rev=fc6777aa30708f8312e06914fcd22358979ab5b9#fc6777aa30708f8312e06914fcd22358979ab5b9" }
 dependencies = [
+    { name = "cron-converter" },
     { name = "rich" },
     { name = "ruamel-yaml" },
     { name = "sentry-sdk" },

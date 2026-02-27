@@ -7,13 +7,13 @@ from yarl import URL
 from post_process import fmt, tz
 
 
-def generate_ical(path: str, timestamp: str) -> URL:
-    return URL(f"https://mause.me/blueroom/{path}").with_query(timestamp=timestamp)
+def generate_ical(path: str, updated_at: str) -> URL:
+    return URL(f"https://mause.me/blueroom/{path}").with_query(updated_at=updated_at)
 
 
-def generate_gcal(path: str, timestamp: str) -> URL:
+def generate_gcal(path: str, updated_at: str) -> URL:
     return URL("https://calendar.google.com/calendar/render").with_query(
-        cid=str(generate_ical(path, timestamp).with_scheme("webcal")),
+        cid=str(generate_ical(path, updated_at).with_scheme("webcal")),
     )
 
 
@@ -24,13 +24,13 @@ template = Template(
 <ul>
 {% for file in files %}
 <li>
-{{file.stem}}: 
-<a href="{{generate_gcal(file.name, timestamp)}}">Google Calendar</a>, <a href="{{generate_ical(file.name, timestamp)}}">iCal</a>
+{{file.stem}}:
+<a href="{{generate_gcal(file.name, updated_at)}}">Google Calendar</a>, <a href="{{generate_ical(file.name, updated_at)}}">iCal</a>
 </li>
 {% endfor %}
 </ul>
 <br/>
-Updated: {{timestamp}}<br/>
+Updated: {{updated_at}}<br/>
 View the code on <a href="https://github.com/Mause/blueroom">GitHub</a>.
 """
 )
@@ -38,12 +38,12 @@ View the code on <a href="https://github.com/Mause/blueroom">GitHub</a>.
 
 def main() -> None:
     files = list(Path("output").glob("*.ics"))
-    timestamp = datetime.fromtimestamp(
+    updated_at = datetime.fromtimestamp(
         files[0].stat().st_mtime, tz=timezone.utc
     ).astimezone(tz)
 
     html = template.render(
-        timestamp=fmt(timestamp),
+        updated_at=fmt(updated_at),
         files=files,
         generate_ical=generate_ical,
         generate_gcal=generate_gcal,

@@ -58,7 +58,6 @@ def process(data: Events, updated_at: datetime, output_filename: Path) -> bytes:
             event.add("summary", f"{show.title} (Tickets {date.status.name})")
             event.add("last-modified", updated_at)
             event.add("dtstamp", updated_at)
-            # TODO: can we remove this timezone conversion?
             event.add("dtstart", date.start.astimezone(tz))
             event.add("dtend", date.end.astimezone(tz))
             event.add("location", date.venue)

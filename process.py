@@ -118,11 +118,31 @@ async def main(argv: list[str]) -> None:
         f.write(data.model_dump_json(indent=2))
 
 
-async def process_domain(domain: str, updated_at: datetime) -> Events:
-    url = f"https://tix.{domain}/api/v1/Items/Browse"
+def get_client() -> httpx.AsyncClient:
     retry = Retry(total=5, backoff_factor=0.5)
     transport = RetryTransport(retry=retry)
-    client = httpx.AsyncClient(transport=transport)
+    return httpx.AsyncClient(transport=transport)
+
+
+def get_timezone(domain: str) -> str:
+    match domain:
+        case "blueroom.org.au":
+            timezone = "Australia/Perth"
+        case "ourgoldenage.com.au":
+            timezone = "Australia/Sydney"
+        case "queerscreen.org.au":
+            timezone = "Australia/Sydney"
+        case _:
+            raise Exception(f"Unknown zone: {domain}")
+    return timezone
+
+
+async def process_domain(domain: str, updated_at: datetime) -> Events:
+    timezone = get_timezone(domain)
+
+    url = f"https://tix.{domain}/api/v1/Items/Browse"
+    client = get_client()
+
     data = (await client.get(url)).json()
     with open(f"output/{domain}.raw.json", "w") as fh:
         json.dump(data, fh, indent=2)
@@ -130,6 +150,7 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
     shows: dict[str, list[FerveItem]] = groupby(
         data.Items, lambda x: x.Name.replace(" - Opening Night", "")
     )
+
     descriptions = dict(
         tqdm(
             await gather(
@@ -140,16 +161,6 @@ async def process_domain(domain: str, updated_at: datetime) -> Events:
             )
         )
     )
-
-    match domain:
-        case "blueroom.org.au":
-            timezone = "Australia/Perth"
-        case "ourgoldenage.com.au":
-            timezone = "Australia/Sydney"
-        case "queerscreen.org.au":
-            timezone = "Australia/Sydney"
-        case _:
-            raise Exception(f"Unknown zone: {domain}")
 
     return Events(
         timezone=timezone,
